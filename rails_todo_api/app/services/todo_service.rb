@@ -2,8 +2,12 @@ require 'google/cloud/firestore'
 
 class TodoService
     def initialize
-        @firestore = Google::Cloud::Firestore.new project_id: 'rails-todo-app-386721',
-            keyfile: '/mnt/c/git/Rails Todo/Keys/rails-todo-app-386721-9768c0fe3836.json'
+        file_path = File.expand_path('../resources/appsettings.json', File.dirname(__FILE__))
+        file = File.read(file_path)
+        data_hash = JSON.parse(file)
+
+        @firestore = Google::Cloud::Firestore.new project_id: data_hash["GCP"]["ProjectId"],
+            keyfile: Rails.application.credentials.keyfile # Hoping this stays as nil if no keyfile found. We only need this when running locally.
     end
 
     def get_todos(user_id)

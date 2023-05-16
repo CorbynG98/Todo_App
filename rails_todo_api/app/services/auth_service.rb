@@ -6,7 +6,8 @@ class AuthService
     attr_accessor :all
 
     def initialize
-        file = File.read('../resources/appsettings.json')
+        file_path = File.expand_path('../resources/appsettings.json', File.dirname(__FILE__))
+        file = File.read(file_path)
         data_hash = JSON.parse(file)
         
         @firestore = Google::Cloud::Firestore.new project_id: data_hash["GCP"]["ProjectId"],

@@ -1,11 +1,8 @@
-FROM ruby:3.0.0
-
-ADD . /rails_todo_api
-WORKDIR /rails_todo_api
+FROM ruby:3.2.2
+RUN apt-get update && apt-get install -y nodejs
+WORKDIR /app
+COPY Gemfile* .
 RUN bundle install
-
-ENV RAILS_ENV production
-ENV RAILS_SERVE_STATIC_FILES true
-
+COPY . .
 EXPOSE 3000
-CMD ["bash"]
+CMD ["rails", "server", "-b", "0.0.0.0"]

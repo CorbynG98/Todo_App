@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: production-files
-          path: ./dist
+          path: ./react_todo_frontend/dist
           if-no-files-found: error
 
   deploy:

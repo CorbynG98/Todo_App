@@ -5,11 +5,11 @@ require 'json'
 class AuthService
     attr_accessor :all
 
-    def initialize
+    def initialize        
         file_path = File.expand_path('../resources/appsettings.json', File.dirname(__FILE__))
         file = File.read(file_path)
         data_hash = JSON.parse(file)
-        
+
         @firestore = Google::Cloud::Firestore.new project_id: data_hash["GCP"]["ProjectId"],
             keyfile: Rails.application.credentials.keyfile # Hoping this stays as nil if no keyfile found. We only need this when running locally.
     end
@@ -31,7 +31,7 @@ class AuthService
             user_id: user_ref.document_id,
             created_at: Time.now
         })
-        return Session.new(session_ref.document_id, {session_token: session_token, created_at: Time.now})
+        return Session.new({username: _username, session_token: session_token, created_at: Time.now})
     end
 
     def signin(_username, _password)
@@ -44,7 +44,7 @@ class AuthService
                 user_id: user_ref.document_id,
                 created_at: Time.now
             })
-            return Session.new(session_ref.document_id, {session_token: session_token, created_at: Time.now})
+            return Session.new({username: _username, session_token: session_token, created_at: Time.now})
         else
             return nil
         end

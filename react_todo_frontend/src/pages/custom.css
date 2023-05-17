@@ -1,0 +1,170 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: inline-block;
+  margin: 3px 10px;
+}
+
+a {
+  color: #42b983;
+}
+
+/* -- TODO INPUT STYLES -- */
+.new-todo:focus,
+.remove:focus {
+  outline: none;
+}
+
+.new-todo {
+  width: 100%;
+  height: 2.8rem;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  border: none;
+}
+
+.new-todo-container {
+  border: none;
+  border-bottom: 1px solid #dddddd;
+}
+
+/* -- LIST ITEM STYLES -- */
+li.completed label {
+  color: #888888;
+  text-decoration: line-through;
+}
+
+.todo-item {
+  padding: 0.2rem;
+  margin: 0;
+  border-bottom: 1px solid #dddddd;
+  transition: 0.3s;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-list li .remove:hover {
+  color: #42b983;
+}
+
+.todo-list li .remove:after {
+  content: '×';
+}
+
+.list-item {
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  height: 2rem;
+}
+
+.list-item .remove {
+  display: none;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  transition: 0.2s;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  color: #bd3c3c;
+  font-weight: bold;
+  border: none;
+  content: '×';
+  justify-self: center;
+  align-self: center;
+}
+
+.list-item:hover .remove {
+  display: inline;
+}
+
+.list-item .check {
+  transition: 0.5s;
+  justify-self: center;
+  align-self: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: white;
+  border-radius: 50%;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  -webkit-appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.list-item .title {
+  transition: 0.5s ease-in;
+  justify-self: left;
+  align-self: center;
+  padding: 0;
+  margin: 0;
+}
+
+.list-item .check:checked {
+  border: 1px solid #42b983;
+  content: '✓';
+}
+
+.list-item:hover .remove {
+  display: inline;
+}
+
+/* -- FILTER/FOOTER STYLES -- */
+.filters {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.filters li {
+  display: inline;
+  margin: 0;
+}
+
+.filters li a {
+  color: inherit;
+  padding: 3px 7px;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  transition: 0.2s;
+}
+
+.filters li a:hover {
+  border-color: #42b983;
+  cursor: pointer;
+}
+
+.filters li a.selected {
+  border-color: #42b983;
+}
+
+.footer {
+  padding: 1rem 1rem 0 1rem;
+
+  font-size: 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+}
+
+.clear-complete {
+  justify-self: right;
+  transition: 0.2s;
+}
+
+.clear-complete:hover {
+  cursor: pointer;
+  color: #42b983;
+}
+
+.remaining {
+  justify-self: left;
+}

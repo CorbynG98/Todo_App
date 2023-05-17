@@ -1,0 +1,8 @@
+/* ========== CORE TAG STYLES ========== */
+html,
+body {
+  background: radial-gradient(#262626, black);
+  position: relative;
+  margin: 0;
+  min-height: 100vh;
+}

@@ -22,4 +22,9 @@ class TodoController < ApplicationController
     result = @todo_service.remove(params[:id], @session[:user_id]) if params[:id].present?
     if result == false then render json: { error: 'Unable to remove this todo item' }, status: :bad_request end
   end
+
+  def clearcompleted
+    result = @todo_service.clear_completed(@session[:user_id])
+    if result == false then render json: { error: 'Unable to clear completed todo items' }, status: :bad_request end
+  end
 end

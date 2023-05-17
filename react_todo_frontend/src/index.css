@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html,
+body,
+#root,
+.maxHeight {
+  height: 100%;
+  width: 100%;
+}
+
+.navSemiBackground {
+  background-color: rgba(13, 14, 17, 0.8);
+  border-color: rgb(32, 34, 45);
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  backdrop-filter: blur(18px);
+  height: 5rem;
+}

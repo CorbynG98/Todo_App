@@ -53,4 +53,15 @@ class TodoService
         todo_ref.delete
         return true
     end
+
+    def clear_completed(_user_id)
+        todos_ref = @firestore.col("Todo").where("user_id", "=", _user_id).where("completed", "=", true).order(:created_at, :asc)
+        # Loop through and delete all
+        todos_ref.get do |todo_ref|
+            todo_solo_ref = @firestore.col("Todo").doc(todo_ref.document_id)
+            todo_solo_ref.delete
+        end
+
+        return true
+    end
 end

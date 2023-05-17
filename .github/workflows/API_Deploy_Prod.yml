@@ -58,6 +58,9 @@ jobs:
     name: Deploy Docker Image
     needs: build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rails_todo_api
 
     permissions:
       contents: 'read'

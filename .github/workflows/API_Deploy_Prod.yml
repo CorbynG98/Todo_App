@@ -1,4 +1,4 @@
-name: Api Deploy Prod
+name: Rails Api GCP Cloud Run Deploy
 
 on:
   push:
@@ -8,6 +8,11 @@ env:
   REGISTRY: us-central1-docker.pkg.dev
   IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}/rails.todo.api
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
   build:
     name: Build And Push Docker Image
     needs: testing

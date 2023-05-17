@@ -1,0 +1,43 @@
+name: Deploy to Github Pages
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  gh_pages_deploy:
+    name: Deploying to Github Pages
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Token Replacement
+        uses: receiptably/variable-substitution@v1
+        with:
+            files: '**/appsettings.json'
+        env:
+            "apiUrl": ${{ secrets.API_URL }}
+
+      - name: npm ci, build
+        run: |
+          npm ci --legacy-peer-deps
+          npm run build
+
+      - name: copy in files
+        shell: bash
+        run: |
+          cp ./CNAME ./dist/CNAME
+          cp ./dist/index.html ./dist/404.html
+
+      - name: deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: ./dist

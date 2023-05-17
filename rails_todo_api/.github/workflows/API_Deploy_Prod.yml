@@ -1,0 +1,72 @@
+name: Api Deploy Prod
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  REGISTRY: us-central1-docker.pkg.dev
+  IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}/rails.todo.api
+
+  build:
+    name: Build And Push Docker Image
+    needs: testing
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: 'auth'
+      name: "Authenticate Google Cloud"
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: 'projects/731679007643/locations/global/workloadIdentityPools/github-actions/providers/rails-todo-identity-pool-github'
+        service_account: github-actions@rails-todo-app-386721.iam.gserviceaccount.com
+
+    - name: Configure Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Configure Docker
+      run: gcloud auth configure-docker --quiet $REGISTRY
+
+    - name: Token Replacement
+      uses: receiptably/variable-substitution@v1
+      with:
+        files: '**/rails_todo_api/app/resources/appsettings.json'
+      env:
+        "GCP.ProjectId": ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Build Docker Image
+      run: docker build -f ./rails_todo_api/Dockerfile.rails -t $IMAGE_NAME .
+
+    - name: Push Docker Image
+      run: docker push $IMAGE_NAME
+
+  deploy:
+    name: Deploy Docker Image
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: 'auth'
+      name: "Authenticate Google Cloud"
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: 'projects/731679007643/locations/global/workloadIdentityPools/github-actions/providers/rails-todo-identity-pool-github'
+        service_account: github-actions@rails-todo-app-386721.iam.gserviceaccount.com
+
+    - name: Configure Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Deploy Docker Image
+      run: gcloud run deploy rails-todo-api --image $IMAGE_NAME --region us-central1 --platform managed

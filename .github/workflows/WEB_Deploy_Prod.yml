@@ -10,11 +10,8 @@ concurrency:
 
 jobs:
   build:
-    name: Build
+    name: Build and Deploy
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./react_todo_frontend
 
     permissions:
       contents: 'read'
@@ -30,7 +27,7 @@ jobs:
       - name: Token Replacement
         uses: receiptably/variable-substitution@v1
         with:
-          files: '**/src/interceptors/appsettings.json'
+          files: '**/react_todo_frontend/src/interceptors/appsettings.json'
         env:
             "apiUrl": ${{ secrets.API_URL }}
 
@@ -42,34 +39,11 @@ jobs:
       - name: copy in files
         shell: bash
         run: |
-          cp ./CNAME ./dist/CNAME
-          cp ./dist/index.html ./dist/404.html
-
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v3
-        with:
-          name: production-files
-          path: ./react_todo_frontend/dist
-          if-no-files-found: error
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: production-files
-          path: ./dist
-
+          cp ./react_todo_frontend/CNAME ./react_todo_frontend/dist/CNAME
+          cp ./react_todo_frontend/dist/index.html ./react_todo_frontend/dist/404.html
+      
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: ./dist
+          publish_dir: ./react_todo_frontend/dist

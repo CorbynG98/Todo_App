@@ -85,9 +85,15 @@ export default function SigninPage() {
             Looks good!
           </Form.Control.Feedback>
         </Form.Group>
-        <Button type='submit' disabled={loginLoading} style={{ width: '5rem' }}>
-          {loginLoading ? <Spinner animation='border' size='sm' /> : 'Submit'}
-        </Button>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Button type='submit' disabled={loginLoading} style={{ width: '5rem' }}>
+            {loginLoading ? <Spinner animation='border' size='sm' /> : 'Submit'}
+          </Button>
+          <Nav.Link style={{ color: 'black' }} as={Link} to='/Signup'>
+            Need an account?
+          </Nav.Link>
+        </div>
       </Form>
     );
   };
@@ -103,7 +109,7 @@ export default function SigninPage() {
           flexGrow: 1,
         }}
         id='loginPage'>
-        <Card style={{ width: '50%', padding: '2rem' }}>
+        <Card style={{ width: '50%', padding: '2rem', marginTop: '2rem' }}>
           <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>Login</p>
           {isLoggedIn ? (
             <div>

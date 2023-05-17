@@ -24,24 +24,28 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Token Replacement
+        working-directory: ./react_todo_frontend
         uses: receiptably/variable-substitution@v1
         with:
-            files: '**/appsettings.json'
+          files: '**/src/interceptors/appsettings.json'
         env:
             "apiUrl": ${{ secrets.API_URL }}
 
       - name: npm ci, build
+        working-directory: ./react_todo_frontend
         run: |
           npm ci --legacy-peer-deps
           npm run build
 
       - name: copy in files
+        working-directory: ./react_todo_frontend
         shell: bash
         run: |
           cp ./CNAME ./dist/CNAME
           cp ./dist/index.html ./dist/404.html
 
       - name: deploy to gh-pages
+        working-directory: ./react_todo_frontend
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}

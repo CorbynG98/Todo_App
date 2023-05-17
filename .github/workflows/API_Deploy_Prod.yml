@@ -39,13 +39,15 @@ jobs:
       run: gcloud auth configure-docker --quiet $REGISTRY
 
     - name: Token Replacement
+      working-directory: ./rails_todo_api
       uses: receiptably/variable-substitution@v1
       with:
-        files: '**/rails_todo_api/app/resources/appsettings.json'
+        files: '**/app/resources/appsettings.json'
       env:
         "GCP.ProjectId": ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Build Docker Image
+      working-directory: ./rails_todo_api
       run: docker build -f ./rails_todo_api/Dockerfile.rails -t $IMAGE_NAME .
 
     - name: Push Docker Image

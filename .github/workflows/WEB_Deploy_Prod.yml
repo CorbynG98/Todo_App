@@ -32,6 +32,7 @@ jobs:
             "apiUrl": ${{ secrets.API_URL }}
 
       - name: npm ci, build
+        working-directory: ./react_todo_frontend
         run: |
           npm ci --legacy-peer-deps
           npm run build

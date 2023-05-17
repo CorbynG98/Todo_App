@@ -48,7 +48,7 @@ jobs:
         "GCP.ProjectId": ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Build Docker Image
-      run: docker build -f ./rails_todo_api/Dockerfile.rails -t $IMAGE_NAME .
+      run: docker build -f ./Dockerfile.rails -t $IMAGE_NAME .
 
     - name: Push Docker Image
       run: docker push $IMAGE_NAME

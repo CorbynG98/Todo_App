@@ -49,6 +49,9 @@ Rails.application.configure do
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
   
+  # Allow custom domain host
+  config.hosts << "corbyngreenwood.com"
+  
   Google::Cloud.configure do |config|
     # Shared project_id and keyfile
     config.project_id = "rails-todo-app-386721"

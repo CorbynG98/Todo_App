@@ -51,7 +51,7 @@ Rails.application.configure do
   config.assets.quiet = true
 
   # Allow custom domain host
-  config.hosts << "rails-todo-api.corbyngreenwood.com"
+  config.hosts << "corbyngreenwood.com"
   
   Google::Cloud.configure do |config|
     # Shared project_id and keyfile

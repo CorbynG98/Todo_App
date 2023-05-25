@@ -1,6 +1,6 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins '::1, 127.0.0.1, rails-todo.corbyngreenwood.com'
+      origins '::1, 127.0.0.1, rails-todo.corbyngreenwood.com, https://rails-todo.corbyngreenwood.com/, http://rails-todo.corbyngreenwood.com/'
       resource '/auth',
         headers: :any,
         methods: [:post, :options]

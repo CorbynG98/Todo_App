@@ -1,4 +1,4 @@
-class AuthController < ApplicationController
+class V1::AuthController < V1::ApplicationController
   before_action :get_auth_service
   before_action :verify_auth_token, only: %i[signout]
 

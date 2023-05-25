@@ -1,4 +1,4 @@
-class ApplicationController < ActionController::API  
+class V1::ApplicationController < ActionController::API  
     private
     def get_auth_service
         @auth_service = AuthService.new

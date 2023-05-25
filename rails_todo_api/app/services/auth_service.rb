@@ -57,7 +57,6 @@ class AuthService
     end
 
     def verify_token(_session_token)
-        puts _session_token
         session_ref = @firestore.col("Session").where("session_token", "=", Digest::SHA256.hexdigest(_session_token))
         session = session_ref.get.first
         if session then return session else return nil end

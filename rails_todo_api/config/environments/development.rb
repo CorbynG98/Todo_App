@@ -52,13 +52,15 @@ Rails.application.configure do
 
   # Allow custom domain host
   config.hosts << "rails-todo-api.corbyngreenwood.com"
-
-  # Raises error for missing translations.
-  # config.i18n.raise_on_missing_translations = true
-
-  # Annotate rendered view with file names.
-  # config.action_view.annotate_rendered_view_with_filenames = true
-
-  # Uncomment if you wish to allow Action Cable access from any origin.
-  # config.action_cable.disable_request_forgery_protection = true
+  
+  Google::Cloud.configure do |config|
+    # Shared project_id and keyfile
+    config.project_id = "rails-todo-app-386721"
+    config.keyfile = Rails.application.credentials.keyfile
+  
+    # Library specific configurations
+    config.error_reporting.project_id = "rails-todo-api-dev"
+    config.logging.log_name = "rails-todo-api-dev"
+    config.trace.capture_stack = true
+  end
 end

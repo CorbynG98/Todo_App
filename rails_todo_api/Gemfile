@@ -70,3 +70,7 @@ gem "google-cloud-firestore"
 gem "json"
 
 gem 'rack-cors', :require => 'rack/cors'
+
+gem 'rack-attack'
+
+gem "stackdriver"

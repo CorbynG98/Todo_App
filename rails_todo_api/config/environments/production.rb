@@ -87,4 +87,15 @@ Rails.application.configure do
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
   end
+  
+  Google::Cloud.configure do |config|
+    # Shared project_id and keyfile
+    config.project_id = "rails-todo-app-386721"
+    config.keyfile = Rails.application.credentials.keyfile
+  
+    # Library specific configurations
+    config.error_reporting.project_id = "rails-todo-api-prod"
+    config.logging.log_name = "rails-todo-api-prod"
+    config.trace.capture_stack = true
+  end
 end

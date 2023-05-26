@@ -2,6 +2,7 @@ class V1::TodoController < V1::ApplicationController
   before_action :get_auth_service
   before_action :get_todo_service
   before_action :verify_auth_token
+  before_action :set_access_headers
 
   def index
     @todos = @todo_service.get_todos(@session[:user_id])

@@ -12,6 +12,10 @@ class V1::ApplicationController < ActionController::API
         @todo_service = TodoService.new
     end
 
+    def set_access_headers
+        headers['Access-Control-Allow-Origin'] = 'https://rails-todo.corbyngreenwood.com'
+    end
+
     def verify_auth_token
         # Get header from request. Strip Bearer word and any spaces.
         auth_header = request.headers['Authorization']

@@ -79,4 +79,4 @@ jobs:
       uses: google-github-actions/setup-gcloud@v1
 
     - name: Deploy Docker Image
-      run: gcloud run deploy rails-todo-api --image $IMAGE_NAME --region us-central1 --platform managed
+      run: gcloud run deploy rails-todo-api-us --image $IMAGE_NAME --region us-central1 --platform managed

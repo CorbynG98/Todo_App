@@ -1,9 +1,14 @@
 import Cookies from 'universal-cookie';
 
-export const setAuthCookie = (username: string, token: string) => {
+export const setAuthDataCookie = (username: string, token: string, cookieName: string) => {
   const cookies = new Cookies();
-  cookies.set('railsTodoData', { username: username, token: token });
+  cookies.set(cookieName, { username: username, token: token });
 };
+
+export const setApiDataCookie = (apiType: string, authCookieName: string) => {
+  const cookies = new Cookies();
+  cookies.set('apiData', { apiType: apiType, cookieName: authCookieName });
+}
 
 export const getCookie = (cookieName: string) => {
   const cookies = new Cookies();

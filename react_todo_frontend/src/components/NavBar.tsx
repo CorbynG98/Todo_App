@@ -1,4 +1,4 @@
-import { signOut } from '@src/context/slices/auth_slice';
+import { changeApiType, signOut } from '@src/context/slices/auth_slice';
 import { store } from '@src/context/store';
 import { Col, Row } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
@@ -7,15 +7,37 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import Navbar from 'react-bootstrap/Navbar';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Select, { SingleValue } from 'react-select';
 import { State } from '../models/State';
 
 function NavBar() {
   const isLoggedIn = useSelector((state: State) => state.isLoggedIn);
   const username = useSelector((state: State) => state.username);
+  const apiType = useSelector((state: State) => state.apiType);
 
   const runSignout = () => {
     store.dispatch(signOut());
   };
+
+  const getApiTypeLabel = (type: string) => {
+    switch (type) {
+      case 'node':
+        return 'NodeJS';
+      case 'rails':
+        return 'Rails';
+      default:
+        return 'Rails';
+    }
+  }
+
+  const handleApiTypeChange = (newValue: SingleValue<{ value: string; label: string; }>) => {
+    store.dispatch(changeApiType(newValue?.value ?? 'rails'));
+  }
+
+  const options = [
+    { value: 'node', label: getApiTypeLabel('node') },
+    { value: 'rails', label: getApiTypeLabel('rails') }
+  ]
 
   return (
     <Navbar variant='dark' sticky='top' className='navSemiBackground'>
@@ -38,17 +60,20 @@ function NavBar() {
                   className='d-inline-block align-top'
                   style={{ borderRadius: '15%' }}
                 />{' '}
-                <strong style={{ marginLeft: '1rem' }}>Rails Todo App</strong>
+                <strong style={{ marginLeft: '1rem' }}>Todo App</strong>
               </Navbar.Brand>
             </Col>
-            <Col md='8'></Col>
-            <Col md='2'>
+            <Col md='6'></Col>
+            <Col md='4'>
               <div
                 style={{
                   display: 'flex',
                   justifyContent: 'right',
                   alignItems: 'center',
                 }}>
+                <div style={{ marginRight: '1rem', width: "10rem" }}>
+                  <Select options={options} value={{ value: apiType, label: `${getApiTypeLabel(apiType)}` }} onChange={handleApiTypeChange} />
+                </div>
                 {isLoggedIn ? (
                   <NavDropdown
                     style={{ color: 'white' }}

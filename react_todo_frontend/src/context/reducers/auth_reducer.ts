@@ -5,6 +5,8 @@ const initialState: State = {
   username: null,
   token: null,
   isLoggedIn: false,
+  apiType: 'rails',
+  cookieName: 'railsAuthData'
 };
 
 const auth_reducer = (state = initialState, action: AnyAction) => {
@@ -22,6 +24,8 @@ const auth_reducer = (state = initialState, action: AnyAction) => {
         isLoggedIn: action.data.username == null ? false : true,
         username: action.data.username,
         token: action.data.token,
+        apiType: action.data.apiType,
+        cookieName: action.data.cookieName,
       };
     case 'SIGN_OUT':
       return {
@@ -30,6 +34,15 @@ const auth_reducer = (state = initialState, action: AnyAction) => {
         username: null,
         token: null,
       };
+    case 'CHANGE_API_TYPE':
+      return {
+        ...state,
+        apiType: action.data.apiType,
+        cookieName: action.data.cookieName,
+        username: action.data.username,
+        token: action.data.token,
+        isLoggedIn: action.data.username == null ? false : true,
+      }
     default:
       return state;
   }

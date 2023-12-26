@@ -1,5 +1,5 @@
 import { AxiosResponse, CancelTokenSource } from 'axios';
-import { default as axios } from '../../interceptors/axiosCoreInterceptor';
+import { default as getAxiosInterceptor } from '../../interceptors/axiosInterceptor';
 import { TodoResource } from '../../models/TodoResource';
 
 export const GetTodos = async (
@@ -7,6 +7,7 @@ export const GetTodos = async (
 ): Promise<TodoResource[]> => {
   const endpoint = '/todo';
   try {
+    const axios = await getAxiosInterceptor();
     var result = await axios.get<TodoResource[], AxiosResponse<TodoResource[]>>(
       endpoint,
       {
@@ -25,6 +26,7 @@ export const CreateTodo = async (
 ): Promise<TodoResource> => {
   const endpoint = '/todo';
   try {
+    const axios = await getAxiosInterceptor();
     var result = await axios.post<TodoResource, AxiosResponse<TodoResource>>(
       endpoint,
       data,
@@ -42,6 +44,7 @@ export const ToggleTodoComplete = async (
 ) => {
   const endpoint = '/todo/togglecomplete/' + todoId;
   try {
+    const axios = await getAxiosInterceptor();
     await axios.post<TodoResource, AxiosResponse<TodoResource>>(
       endpoint,
       null,
@@ -61,6 +64,7 @@ export const DeleteTodo = async (
 ) => {
   const endpoint = '/todo/' + todoId;
   try {
+    const axios = await getAxiosInterceptor();
     await axios.delete<TodoResource, AxiosResponse<TodoResource>>(endpoint, {
       cancelToken: cancelToken?.token,
     });
@@ -75,6 +79,7 @@ export const ClearCompletedTodos = async (
 ) => {
   const endpoint = '/todo/clearcompleted';
   try {
+    const axios = await getAxiosInterceptor();
     await axios.post<TodoResource, AxiosResponse<TodoResource>>(endpoint, {
       cancelToken: cancelToken?.token,
     });

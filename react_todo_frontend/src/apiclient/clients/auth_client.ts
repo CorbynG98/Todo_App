@@ -1,5 +1,5 @@
 import { AxiosResponse, CancelTokenSource } from 'axios';
-import { default as axios } from '../../interceptors/axiosCoreInterceptor';
+import { default as getAxiosInterceptor } from '../../interceptors/axiosInterceptor';
 import { AuthData, AuthResource } from '../../models/AuthResource';
 
 export const Authenticate = async (
@@ -11,6 +11,7 @@ export const Authenticate = async (
   body.append('password', data.password ?? '');
   const endpoint = '/auth/signin';
   try {
+    const axios = await getAxiosInterceptor();
     const response = await axios.post<AuthResource, AxiosResponse<AuthData>>(
       endpoint,
       body,
@@ -35,6 +36,7 @@ export const Signup = async (
   body.append('password', data.password ?? '');
   const endpoint = '/auth/signup';
   try {
+    const axios = await getAxiosInterceptor();
     const response = await axios.post<AuthResource, AxiosResponse<AuthData>>(
       endpoint,
       body,
@@ -55,6 +57,7 @@ export const Signout = async (
 ) => {
   const endpoint = '/auth/signout';
   try {
+    const axios = await getAxiosInterceptor();
     await axios.post<null, AxiosResponse<null>>(endpoint, null, {
       cancelToken: cancelToken?.token,
     });

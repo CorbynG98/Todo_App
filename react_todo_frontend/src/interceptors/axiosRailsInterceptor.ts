@@ -5,8 +5,8 @@ import { store } from '../context/store';
 import { getCookie } from '../storageclient/storageclient';
 import appSettings from './appsettings.json';
 
-const axiosCoreInstance = axios.create({
-  baseURL: appSettings.apiUrl,
+const axiosRailsInstance = axios.create({
+  baseURL: appSettings.apiUrlRails,
 });
 
 const notyf = new Notyf({
@@ -14,16 +14,16 @@ const notyf = new Notyf({
   position: { x: 'right', y: 'top' },
 });
 
-axiosCoreInstance.interceptors.request.use(async (config: any) => {
+axiosRailsInstance.interceptors.request.use(async (config: any) => {
   // Get data from async storage for processing reasons
-  let auth = await getCookie('railsTodoData');
+  let auth = await getCookie('railsAuthData');
   if (auth != null && auth.token != null) {
     config.headers.Authorization = `${auth.token}`;
   }
   return config;
 });
 
-axiosCoreInstance.interceptors.response.use(
+axiosRailsInstance.interceptors.response.use(
   (response: any) => response,
   (error: any) => {
     if (axios.isCancel(error)) return Promise.reject('Cancelled request');
@@ -41,4 +41,4 @@ axiosCoreInstance.interceptors.response.use(
   },
 );
 
-export default axiosCoreInstance;
+export default axiosRailsInstance;

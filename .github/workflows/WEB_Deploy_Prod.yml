@@ -32,7 +32,8 @@ jobs:
         with:
           files: '**/src/interceptors/appsettings.json'
         env:
-            "apiUrl": ${{ secrets.API_URL }}
+            "apiUrlRails": ${{ secrets.API_URL_RAILS }}
+            "apiUrlNode": ${{ secrets.API_URL_NODE }}
 
       - name: npm ci, build
         run: |

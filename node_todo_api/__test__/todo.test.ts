@@ -62,7 +62,7 @@ describe('Create Todo', () => {
       .send({ title: 'Test todo 1' })
       .set('Authorization', `${sessionToken}`)
       .set('Accept', 'application/json')
-      .expect(204);
+      .expect(200);
   });
 
   it('POST /todo with invalid data and authed user should fail', async () => {

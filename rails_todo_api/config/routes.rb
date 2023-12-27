@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   concern :base_api do  
     resources :todo, only: [:index, :create, :destroy]
 
-    post 'todo/togglecomplete/:id', to: 'todo#togglecomplete'
+    post 'todo/:id/togglecomplete', to: 'todo#togglecomplete'
     post 'todo/clearcompleted', to: 'todo#clearcompleted'
   
     post 'auth/signup', to: 'auth#signup'

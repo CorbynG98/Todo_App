@@ -20,7 +20,7 @@ const todo_routes = (app: Express) => {
     .post([...validateTitle, authenticate], create);
 
   app.route('/todo/:id').delete(authenticate, remove);
-  app.route('/todo/toggleComplete/:id').post(authenticate, toggleComplete);
+  app.route('/todo/:id/toggleComplete').post(authenticate, toggleComplete);
 
   app.route('/todo/clearCompleted').post(authenticate, clearComplete);
 };

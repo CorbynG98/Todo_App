@@ -16,7 +16,7 @@ const notyf = new Notyf({
 
 axiosNodeInstance.interceptors.request.use(async (config: any) => {
   // Get data from async storage for processing reasons
-  let auth = await getCookie('railsAuthData');
+  let auth = await getCookie('nodeAuthData');
   if (auth != null && auth.token != null) {
     config.headers.Authorization = `${auth.token}`;
   }

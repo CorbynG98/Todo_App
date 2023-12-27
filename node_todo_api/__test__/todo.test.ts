@@ -154,41 +154,41 @@ describe('Remove Todo', () => {
  * Tests for the toggleComplete endpoint
  */
 describe('Toggle Todo Complete', () => {
-  it('POST /todo/:id/toggleComplete with valid id and authed user should succeed', async () => {
+  it('POST /todo/toggleComplete/:id with valid id and authed user should succeed', async () => {
     await requestWithSupertest
       .post('/todo/6dd1b73fe2845/toggleComplete')
       .set('Authorization', `${sessionToken}`)
       .expect(204);
   });
 
-  it('POST /todo:id/toggleComplete with invalid id and authed user should fail', async () => {
+  it('POST /todotoggleComplete/:id with invalid id and authed user should fail', async () => {
     await requestWithSupertest
       .post('/todo/totallyInvalid/toggleComplete')
       .set('Authorization', `${sessionToken}`)
       .expect(404);
   });
 
-  it('POST /todo/:id/toggleComplete with valid id and invalid authed user should fail', async () => {
+  it('POST /todo/toggleComplete/:id with valid id and invalid authed user should fail', async () => {
     await requestWithSupertest
       .post('/todo/6dd1b73fe2845/toggleComplete')
       .set('Authorization', `totallyRandomToken`)
       .expect(403);
   });
 
-  it('POST /todo:id/toggleComplete with invalid id and invalid authed user should fail', async () => {
+  it('POST /todotoggleComplete/:id with invalid id and invalid authed user should fail', async () => {
     await requestWithSupertest
       .post('/todo/totallyInvalid/toggleComplete')
       .set('Authorization', `totallyRandomToken`)
       .expect(403);
   });
 
-  it('POST /todo:id/toggleComplete with valid id and no authed user should fail', async () => {
+  it('POST /todotoggleComplete/:id with valid id and no authed user should fail', async () => {
     await requestWithSupertest
       .post('/todo/6dd1b73fe2845/toggleComplete')
       .expect(401);
   });
 
-  it('POST /todo:id/toggleComplete with invalid id and no authed user should fail', async () => {
+  it('POST /todotoggleComplete/:id with invalid id and no authed user should fail', async () => {
     await requestWithSupertest
       .post('/todo/totallyInvalid/toggleComplete')
       .expect(401);

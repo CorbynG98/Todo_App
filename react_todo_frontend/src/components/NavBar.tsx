@@ -28,16 +28,18 @@ function NavBar() {
       default:
         return 'Rails';
     }
-  }
+  };
 
-  const handleApiTypeChange = (newValue: SingleValue<{ value: string; label: string; }>) => {
+  const handleApiTypeChange = (
+    newValue: SingleValue<{ value: string; label: string }>,
+  ) => {
     store.dispatch(changeApiType(newValue?.value ?? 'rails'));
-  }
+  };
 
   const options = [
     { value: 'node', label: getApiTypeLabel('node') },
-    { value: 'rails', label: getApiTypeLabel('rails') }
-  ]
+    { value: 'rails', label: getApiTypeLabel('rails') },
+  ];
 
   return (
     <Navbar variant='dark' sticky='top' className='navSemiBackground'>
@@ -71,8 +73,15 @@ function NavBar() {
                   justifyContent: 'right',
                   alignItems: 'center',
                 }}>
-                <div style={{ marginRight: '1rem', width: "10rem" }}>
-                  <Select options={options} value={{ value: apiType, label: `${getApiTypeLabel(apiType)}` }} onChange={handleApiTypeChange} />
+                <div style={{ marginRight: '1rem', width: '10rem' }}>
+                  <Select
+                    options={options}
+                    value={{
+                      value: apiType,
+                      label: `${getApiTypeLabel(apiType)}`,
+                    }}
+                    onChange={handleApiTypeChange}
+                  />
                 </div>
                 {isLoggedIn ? (
                   <NavDropdown

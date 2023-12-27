@@ -86,8 +86,16 @@ export default function SigninPage() {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Button type='submit' disabled={loginLoading} style={{ width: '5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Button
+            type='submit'
+            disabled={loginLoading}
+            style={{ width: '5rem' }}>
             {loginLoading ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </Button>
           <Nav.Link style={{ color: 'black' }} as={Link} to='/Signup'>

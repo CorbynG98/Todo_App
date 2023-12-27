@@ -6,7 +6,7 @@ const initialState: State = {
   token: null,
   isLoggedIn: false,
   apiType: 'rails',
-  cookieName: 'railsAuthData'
+  cookieName: 'railsAuthData',
 };
 
 const auth_reducer = (state = initialState, action: AnyAction) => {
@@ -42,7 +42,7 @@ const auth_reducer = (state = initialState, action: AnyAction) => {
         username: action.data.username,
         token: action.data.token,
         isLoggedIn: action.data.username == null ? false : true,
-      }
+      };
     default:
       return state;
   }

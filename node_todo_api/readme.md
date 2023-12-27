@@ -30,8 +30,8 @@
 8. Assign the new user permissions to access the database<br />
    `grant all privileges on node_todo.* to 'node_todo'@'%';`<br />
    In the interest of space and time, I grant all privileges to all tables in the node_todo table. In a real situation, specifying a list of grants is much more secure and safe. Up to you to research.<br />
-   - An example with more fine grained permissions could be as such, and what I use on my public databases with   mysql:<br />
-      `grant select,insert,alter,delete,create,references,update on node.* to 'node_todo'@'%';`
+   - An example with more fine grained permissions could be as such, and what I use on my public databases with mysql:<br />
+     `grant select,insert,alter,delete,create,references,update on node.* to 'node_todo'@'%';`
    - For a test user, this might also include `index`, `drop`, etc. so you have some extra functionality.
 9. Run the command `flush privileges;` to finalise the permission process. Without this command, the permissions will not be applied.
 10. `quit` out of mysql, and follow the same access command from step 4, with the new username and password. The username does not need the host (`@'[host]`)

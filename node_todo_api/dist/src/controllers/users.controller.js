@@ -57,7 +57,7 @@ const login = async (req, res) => {
             .then(() => {
             return res
                 .status(200)
-                .json({ token: token, username: user_data.username });
+                .json({ session_token: token, username: user_data.username });
         })
             .catch((err) => {
             return res
@@ -121,7 +121,7 @@ const create = async (req, res) => {
             .then(() => {
             return res
                 .status(201)
-                .json({ token: token, username: user_data.username });
+                .json({ session_token: token, username: user_data.username });
         })
             .catch((err) => {
             return res

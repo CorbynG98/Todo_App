@@ -129,7 +129,7 @@ const create = async (req: Request, res: Response) => {
         .then(() => {
           return res
             .status(201)
-            .json({ token: token, username: user_data.username });
+            .json({ session_token: token, username: user_data.username });
         })
         .catch((err) => {
           return res
@@ -151,7 +151,7 @@ const create = async (req: Request, res: Response) => {
  * signout: Given the users auth token from the request, deletes the current session.
  * @param {Object} req Request object as defined by Express
  * @param {Object} res Response object as defined by Express
- * 
+ *
  * ===== Errors =====
  *
  * 204: No Content
@@ -177,4 +177,3 @@ const signout = async (req: Request, res: Response) => {
 };
 
 export { create, login, signout };
-

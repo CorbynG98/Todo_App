@@ -50,4 +50,3 @@ const signout = (values: string[][]): Promise<void> => {
 };
 
 export { getByUsernameAndPassword, insert, signout };
-

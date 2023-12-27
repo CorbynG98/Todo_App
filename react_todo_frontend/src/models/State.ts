@@ -6,4 +6,3 @@ type State = {
   cookieName: string;
 };
 export type { State };
-

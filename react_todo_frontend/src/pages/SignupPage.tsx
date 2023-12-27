@@ -10,10 +10,13 @@ import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignupPage() {
   const isLoggedIn = useSelector((state: State) => state.isLoggedIn);
-  const [signupData, setSignupData] = useState<AuthResource>({} as AuthResource);
+  const [signupData, setSignupData] = useState<AuthResource>(
+    {} as AuthResource,
+  );
   const [signupLoading, setsignupLoading] = useState<boolean>(false);
   const [confirmPassword, setConfirmPassword] = useState<string>('' as string);
-  const [confirmPasswordError, setConfirmPasswordError] = useState<boolean>(true);
+  const [confirmPasswordError, setConfirmPasswordError] =
+    useState<boolean>(true);
   const navigate = useNavigate();
   const notyf = useContext(NotyfContext);
 
@@ -81,8 +84,9 @@ export default function SignupPage() {
               setSignupData((prev) => ({
                 ...prev,
                 password: event.target.value,
-              }))
-              if (event.target.value != confirmPassword) setConfirmPasswordError(true);
+              }));
+              if (event.target.value != confirmPassword)
+                setConfirmPasswordError(true);
               else setConfirmPasswordError(false);
             }}
             required
@@ -95,7 +99,9 @@ export default function SignupPage() {
             Looks good!
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group className='mb-3 input-container' controlId='formConfirmPassword'>
+        <Form.Group
+          className='mb-3 input-container'
+          controlId='formConfirmPassword'>
           <Form.Label style={{ color: 'black' }}>Confirm Password</Form.Label>
           <Form.Control
             type='password'
@@ -104,7 +110,8 @@ export default function SignupPage() {
             value={confirmPassword ?? ''}
             onChange={(event) => {
               setConfirmPassword(event.target.value);
-              if (event.target.value != signupData.password) setConfirmPasswordError(true);
+              if (event.target.value != signupData.password)
+                setConfirmPasswordError(true);
               else setConfirmPasswordError(false);
             }}
             isInvalid={confirmPasswordError}
@@ -120,9 +127,21 @@ export default function SignupPage() {
             Looks good!
           </Form.Control.Feedback>
         </Form.Group>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Button type='submit' disabled={signupLoading} style={{ width: '5rem' }}>
-            {signupLoading ? <Spinner animation='border' size='sm' /> : 'Submit'}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Button
+            type='submit'
+            disabled={signupLoading}
+            style={{ width: '5rem' }}>
+            {signupLoading ? (
+              <Spinner animation='border' size='sm' />
+            ) : (
+              'Submit'
+            )}
           </Button>
           <Nav.Link style={{ color: 'black' }} as={Link} to='/Login'>
             Have an account?

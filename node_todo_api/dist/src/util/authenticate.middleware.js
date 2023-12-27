@@ -9,7 +9,7 @@ const authenticate = (req, res, next) => {
     const token = req.header('Authorization');
     // Validate token
     if (!token) {
-        return res.status(401).send('Access denied. No token provided.');
+        return res.status(401).json('Access denied. No token provided.');
     }
     let hashedToked = crypto_1.default.createHash('sha512').update(token).digest('hex');
     (0, sessions_model_1.getByToken)(hashedToked)
@@ -17,7 +17,7 @@ const authenticate = (req, res, next) => {
         next();
     })
         .catch(() => {
-        return res.status(401).send('Access denied. Invalid token.');
+        return res.status(403).json('Access denied. Invalid token.');
     });
 };
 exports.default = authenticate;

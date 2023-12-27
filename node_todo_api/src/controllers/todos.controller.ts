@@ -46,7 +46,7 @@ const create = async (req: Request, res: Response) => {
   ];
   todo_insert(todo_values)
     .then(() => {
-      return res.status(204).json();
+      return res.status(200).json({ id: todo_values[0][0], created_at: todo_values[1][0], title: todo_values[2][0] });
     })
     .catch((err) => {
       return res.status(500).json({ status: 500, message: err?.code ?? err });
@@ -111,3 +111,4 @@ const clearComplete = async (req: Request, res: Response) => {
 };
 
 export { clearComplete, create, list, remove, toggleComplete };
+

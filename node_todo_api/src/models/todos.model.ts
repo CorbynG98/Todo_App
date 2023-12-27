@@ -2,7 +2,7 @@ import { QueryError } from 'mysql2';
 import { getPool } from '../config/db';
 
 export default interface TodoResource {
-  todo_id: string;
+  id: string;
   created_at: Date;
   title: string;
   user_id: string;
@@ -11,7 +11,7 @@ export default interface TodoResource {
 const getAllByUser = (values: string): Promise<TodoResource[]> => {
   return new Promise((resolve, reject) => {
     getPool().query(
-      'SELECT * FROM Todo WHERE user_id = ?;',
+      'SELECT todo_id as id, created_at, title, completed FROM Todo WHERE user_id = ?;',
       values,
       (err: QueryError | null, rows: any) => {
         if (err) return reject(err);
@@ -24,7 +24,7 @@ const getAllByUser = (values: string): Promise<TodoResource[]> => {
 const insert = (values: (string[] | Date[])[]): Promise<void> => {
   return new Promise((resolve, reject) => {
     getPool().query(
-      'INSERT INTO Todo (todo_id, created_at, title, user_id) VALUES (?, ?, ?, ?);',
+      'INSERT INTO Todo (todo_id as id, created_at, title, user_id) VALUES (?, ?, ?, ?);',
       values,
       (err: QueryError | null, rows: any) => {
         if (err) return reject(err);
@@ -37,7 +37,7 @@ const insert = (values: (string[] | Date[])[]): Promise<void> => {
 const remove = (values: string[][]): Promise<void> => {
   return new Promise((resolve, reject) => {
     getPool().query(
-      'SELECT todo_id FROM Todo WHERE todo_id = ? AND user_id = ?;',
+      'SELECT todo_id as id FROM Todo WHERE todo_id = ? AND user_id = ?;',
       values,
       (err: QueryError | null, rows: any) => {
         if (err) return reject(err);
@@ -59,7 +59,7 @@ const remove = (values: string[][]): Promise<void> => {
 const toggleComplete = (values: string[][]): Promise<void> => {
   return new Promise((resolve, reject) => {
     getPool().query(
-      'SELECT todo_id FROM Todo WHERE todo_id = ? AND user_id = ?;',
+      'SELECT todo_id as id FROM Todo WHERE todo_id = ? AND user_id = ?;',
       values,
       (err: QueryError | null, rows: any) => {
         if (err) return reject(err);
@@ -92,3 +92,4 @@ const clearComplete = (values: string[][]): Promise<void> => {
 };
 
 export { clearComplete, getAllByUser, insert, remove, toggleComplete };
+

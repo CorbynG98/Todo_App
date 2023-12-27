@@ -26,6 +26,7 @@ function TodoPage() {
   );
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
   const isLoggedIn = useSelector((state: State) => state.isLoggedIn);
+  const apiType = useSelector((state: State) => state.apiType);
   const notyf = useContext(NotyfContext);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ function TodoPage() {
     } else {
       setTodoItems([]);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, apiType]);
 
   useEffect(() => {
     filterTodos(filter);
@@ -186,9 +187,8 @@ function TodoPage() {
                   return (
                     <li
                       key={todoItem.id}
-                      className={`todo-item ${
-                        todoItem.completed ? 'completed' : ''
-                      }`}>
+                      className={`todo-item ${todoItem.completed ? 'completed' : ''
+                        }`}>
                       <div className='list-item'>
                         <input
                           className='check'

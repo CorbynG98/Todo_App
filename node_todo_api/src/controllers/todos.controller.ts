@@ -38,15 +38,18 @@ const create = async (req: Request, res: Response) => {
     .digest('hex');
   var user_id = await getByToken(hashedToken); // Auth middleware handles check for me, so we can assume this passes with the data we need
 
+  var id = Math.random().toString(16).substring(2, 32);
+  var created_at = new Date();
+
   let todo_values = [
-    [Math.random().toString(16).substring(2, 32)],
-    [new Date()],
+    [id],
+    [created_at],
     [req.body.title],
     [user_id],
   ];
   todo_insert(todo_values)
     .then(() => {
-      return res.status(200).json({ id: todo_values[0][0], created_at: todo_values[1][0], title: todo_values[2][0] });
+      return res.status(200).json({ id: id, created_at: created_at, title: req.body.title });
     })
     .catch((err) => {
       return res.status(500).json({ status: 500, message: err?.code ?? err });

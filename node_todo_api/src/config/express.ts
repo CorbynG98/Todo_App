@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import express, { Request, Response } from 'express';
 import logger from 'morgan';
 import multer from 'multer';
@@ -35,6 +36,8 @@ const initApp = () => {
   app.use(bodyParser.urlencoded({ extended: true }));
   // multipart/form-data requests
   app.use(upload.none()); // Use none here, as we are not using images, just text
+  // Add CORS middleware
+  app.use(cors());
 
   // ROUTES
   user_routes(app);

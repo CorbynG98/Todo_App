@@ -42,7 +42,7 @@ export const ToggleTodoComplete = async (
   todoId: string,
   cancelToken: CancelTokenSource | undefined | null = null,
 ) => {
-  const endpoint = '/todo/togglecomplete/' + todoId;
+  const endpoint = `todo/${todoId}/togglecomplete`;
   try {
     const axios = await getAxiosInterceptor();
     await axios.post<TodoResource, AxiosResponse<TodoResource>>(

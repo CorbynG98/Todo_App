@@ -20,7 +20,7 @@ const authenticateUser = async () => {
     .post('/auth/signin')
     .send({ username: 'test1', password: 'password' })
     .set('Accept', 'application/json');
-  sessionToken = response.body.token;
+  sessionToken = response.body.session_token;
 };
 
 /**

@@ -20,7 +20,7 @@ const authenticateUser = async () => {
     .post('/auth/signin')
     .send({ username: 'test1', password: 'password' })
     .set('Accept', 'application/json');
-  sessionToken = response.body.token;
+  sessionToken = response.body.session_token;
 };
 
 describe('User Signin', () => {
@@ -32,7 +32,7 @@ describe('User Signin', () => {
       .expect('Content-Type', /json/)
       .expect(200);
 
-    expect(response.body).toHaveProperty('token');
+    expect(response.body).toHaveProperty('session_token');
   });
 
   it('POST /auth/signin with valid username and invalid password should return 400', async () => {
@@ -90,7 +90,7 @@ describe('User Create', () => {
       .expect('Content-Type', /json/)
       .expect(201);
 
-    expect(response.body).toHaveProperty('token');
+    expect(response.body).toHaveProperty('session_token');
   });
 
   it('POST /auth/signup with existing username should return 400', async () => {

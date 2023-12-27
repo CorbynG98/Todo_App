@@ -41,7 +41,6 @@ const signout = (values: string[][]): Promise<void> => {
       'DELETE FROM Session WHERE session_token = ?;',
       values,
       (err: QueryError | null, rows: any) => {
-        console.log(err);
         if (err) return reject(err);
         return resolve();
       },
@@ -50,3 +49,4 @@ const signout = (values: string[][]): Promise<void> => {
 };
 
 export { getByUsernameAndPassword, insert, signout };
+

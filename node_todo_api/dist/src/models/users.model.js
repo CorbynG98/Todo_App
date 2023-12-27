@@ -27,7 +27,6 @@ exports.insert = insert;
 const signout = (values) => {
     return new Promise((resolve, reject) => {
         (0, db_1.getPool)().query('DELETE FROM Session WHERE session_token = ?;', values, (err, rows) => {
-            console.log(err);
             if (err)
                 return reject(err);
             return resolve();

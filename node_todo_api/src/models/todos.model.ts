@@ -24,7 +24,7 @@ const getAllByUser = (values: string): Promise<TodoResource[]> => {
 const insert = (values: (string[] | Date[])[]): Promise<void> => {
   return new Promise((resolve, reject) => {
     getPool().query(
-      'INSERT INTO Todo (todo_id as id, created_at, title, user_id) VALUES (?, ?, ?, ?);',
+      'INSERT INTO Todo (todo_id, created_at, title, user_id) VALUES (?, ?, ?, ?);',
       values,
       (err: QueryError | null, rows: any) => {
         if (err) return reject(err);

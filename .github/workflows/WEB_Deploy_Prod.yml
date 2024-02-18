@@ -1,8 +1,16 @@
 name: React Frontend Github Pages Deploy
 
 on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name for manual trigger'
+        required: true
+        default: "Manual Trigger"
   push:
     branches: [ main ]
+    paths:
+      - 'react_todo_frontend/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}

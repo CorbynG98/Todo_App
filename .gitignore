@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/ruby,rails,dotenv,node,react,rust
 # Edit at https://www.toptal.com/developers/gitignore?templates=ruby,rails,dotenv,node,react,rust
 
+## Custom ones ##
+dist/
+
 ### dotenv ###
 *.env
 

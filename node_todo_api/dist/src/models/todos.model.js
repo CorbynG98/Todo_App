@@ -4,7 +4,7 @@ exports.toggleComplete = exports.remove = exports.insert = exports.getAllByUser 
 const db_1 = require("../config/db");
 const getAllByUser = (values) => {
     return new Promise((resolve, reject) => {
-        (0, db_1.getPool)().query('SELECT * FROM Todo WHERE user_id = ?;', values, (err, rows) => {
+        (0, db_1.getPool)().query('SELECT todo_id as id, created_at, title, completed FROM Todo WHERE user_id = ?;', values, (err, rows) => {
             if (err)
                 return reject(err);
             return resolve(rows);
@@ -24,7 +24,7 @@ const insert = (values) => {
 exports.insert = insert;
 const remove = (values) => {
     return new Promise((resolve, reject) => {
-        (0, db_1.getPool)().query('SELECT todo_id FROM Todo WHERE todo_id = ? AND user_id = ?;', values, (err, rows) => {
+        (0, db_1.getPool)().query('SELECT todo_id as id FROM Todo WHERE todo_id = ? AND user_id = ?;', values, (err, rows) => {
             if (err)
                 return reject(err);
             if (rows == '' || rows == null || rows.length == 0)
@@ -40,7 +40,7 @@ const remove = (values) => {
 exports.remove = remove;
 const toggleComplete = (values) => {
     return new Promise((resolve, reject) => {
-        (0, db_1.getPool)().query('SELECT todo_id FROM Todo WHERE todo_id = ? AND user_id = ?;', values, (err, rows) => {
+        (0, db_1.getPool)().query('SELECT todo_id as id FROM Todo WHERE todo_id = ? AND user_id = ?;', values, (err, rows) => {
             if (err)
                 return reject(err);
             if (rows == '' || rows == null || rows.length == 0)

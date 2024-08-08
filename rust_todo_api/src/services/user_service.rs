@@ -2,7 +2,7 @@ use sqlx::mysql::MySqlPool;
 // Crate imports
 use crate::structs::user_model::User;
 
-pub async fn signin(db_pool: &MySqlPool, username: &str) -> Result<User, &'static str> {
+pub async fn get_by_username(db_pool: &MySqlPool, username: &str) -> Result<User, &'static str> {
     match sqlx::query_as!(
         User,
         "SELECT username, password FROM User WHERE username = ?",

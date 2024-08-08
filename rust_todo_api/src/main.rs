@@ -1,17 +1,19 @@
 mod handlers { // Declare the handlers module
-    pub mod auth_handler;
+    pub mod user_handler;
 }
 mod structs { // Declare the structs module
     pub mod auth_request;
     pub mod signout_request;
     pub mod user_model;
+    pub mod session_model;
 }
 mod services { // Declare the persistence module
-    pub mod auth_service;
+    pub mod user_service;
+    pub mod session_service;
 }
 
 use actix_web::{web, App, HttpServer};
-use handlers::auth_handler::{signin, signup, signout}; // Auth endpoint code
+use handlers::user_handler::{signin, signup, signout}; // Auth endpoint code
 use dotenv::dotenv;
 use sqlx::mysql::{MySqlPool, MySqlPoolOptions};
 

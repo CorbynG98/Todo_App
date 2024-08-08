@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signout = exports.login = exports.create = void 0;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const crypto_1 = __importDefault(require("crypto"));
 const express_validator_1 = require("express-validator");
 const sessions_model_1 = require("../models/sessions.model");
@@ -35,11 +36,11 @@ const login = async (req, res) => {
     if (!validation.isEmpty()) {
         return res.status(400).json({ errors: validation.array() });
     }
-    // Hash password using crypto librarty
-    const hash = crypto_1.default.createHash('sha512');
-    hash.update(user_data.username + user_data.password);
+    // hash.update(user_data.username + user_data.password);
+    let hash = await bcrypt_1.default.hash(user_data.password, 12);
+    console.log("hash", hash);
     // Convert into object better suited to insert into database
-    let user_values = [[user_data.username], [hash.digest('hex')]];
+    let user_values = [[user_data.username], [hash]];
     (0, users_model_1.getByUsernameAndPassword)(user_values)
         .then(() => {
         // Create session and return that
@@ -100,10 +101,9 @@ const create = async (req, res) => {
         return res.status(400).json({ errors: validation.array() });
     }
     // Hash password using crypto librarty
-    const hash = crypto_1.default.createHash('sha512');
-    hash.update(user_data.username + user_data.password);
+    let hash = await bcrypt_1.default.hash(user_data.password, 12);
     // Convert into object better suited to insert into database
-    let user_values = [[user_data.username], [hash.digest('hex')]];
+    let user_values = [[user_data.username], [hash]];
     (0, users_model_1.insert)(user_values)
         .then(() => {
         // Create session and return that

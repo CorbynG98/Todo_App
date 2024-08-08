@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
@@ -37,12 +38,11 @@ const login = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: validation.array() });
   }
 
-  // Hash password using crypto librarty
-  const hash = crypto.createHash('sha512');
-  hash.update(user_data.username + user_data.password);
-
+  // hash.update(user_data.username + user_data.password);
+  let hash = await bcrypt.hash(user_data.password, 12)
+  console.log("hash", hash)
   // Convert into object better suited to insert into database
-  let user_values = [[user_data.username], [hash.digest('hex')]];
+  let user_values = [[user_data.username], [hash]];
 
   getByUsernameAndPassword(user_values)
     .then(() => {
@@ -106,11 +106,9 @@ const create = async (req: Request, res: Response) => {
   }
 
   // Hash password using crypto librarty
-  const hash = crypto.createHash('sha512');
-  hash.update(user_data.username + user_data.password);
-
+  let hash = await bcrypt.hash(user_data.password, 12)
   // Convert into object better suited to insert into database
-  let user_values = [[user_data.username], [hash.digest('hex')]];
+  let user_values = [[user_data.username], [hash]];
 
   user_insert(user_values)
     .then(() => {
@@ -177,3 +175,4 @@ const signout = async (req: Request, res: Response) => {
 };
 
 export { create, login, signout };
+

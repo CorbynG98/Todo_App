@@ -6,8 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web   = "*"
-serde_json  = "*"
-dotenv      = "*"
-serde       = { version = "*", features = ["derive"] }
-sqlx        = { version = "*", features = ["runtime-async-std", "macros", "mysql"] }
+actix-web           = "*"
+serde_json          = "*"
+dotenv              = "*"
+bcrypt              = "*"
+actix-web-validator = "*"
+sha2                = "*"
+base64              = "*"
+hex                 = "*"
+chrono              = "*"
+uuid                = { version = "*", features = ["v4"] }
+serde               = { version = "*", features = ["derive"] }
+sqlx                = { version = "*", features = ["runtime-async-std", "macros", "mysql"] }
+validator           = { version = "*", features = ["derive"] }

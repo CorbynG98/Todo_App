@@ -33,15 +33,17 @@ const create = async (req, res) => {
         .update(req.header('Authorization'))
         .digest('hex');
     var user_id = await (0, sessions_model_1.getByToken)(hashedToken); // Auth middleware handles check for me, so we can assume this passes with the data we need
+    var id = Math.random().toString(16).substring(2, 32);
+    var created_at = new Date();
     let todo_values = [
-        [Math.random().toString(16).substring(2, 32)],
-        [new Date()],
+        [id],
+        [created_at],
         [req.body.title],
         [user_id],
     ];
     (0, todos_model_1.insert)(todo_values)
         .then(() => {
-        return res.status(204).json();
+        return res.status(200).json({ id: id, created_at: created_at, title: req.body.title });
     })
         .catch((err) => {
         return res.status(500).json({ status: 500, message: err?.code ?? err });

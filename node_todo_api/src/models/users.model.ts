@@ -6,12 +6,12 @@ export default interface UserResource {
   password: string;
 }
 
-const getByUsernameAndPassword = (
+const getByUsername = (
   values: string[][],
 ): Promise<UserResource[]> => {
   return new Promise((resolve, reject) => {
     getPool().query(
-      'SELECT * FROM User WHERE username = ? AND password = ? LIMIT 1;',
+      'SELECT * FROM User WHERE username = ? LIMIT 1;',
       values,
       (err: QueryError | null, rows: any) => {
         if (err) return reject(err);
@@ -48,5 +48,5 @@ const signout = (values: string[][]): Promise<void> => {
   });
 };
 
-export { getByUsernameAndPassword, insert, signout };
+export { getByUsername, insert, signout };
 

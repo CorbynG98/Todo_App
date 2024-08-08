@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signout = exports.insert = exports.getByUsernameAndPassword = void 0;
+exports.signout = exports.insert = exports.getByUsername = void 0;
 const db_1 = require("../config/db");
-const getByUsernameAndPassword = (values) => {
+const getByUsername = (values) => {
     return new Promise((resolve, reject) => {
-        (0, db_1.getPool)().query('SELECT * FROM User WHERE username = ? AND password = ? LIMIT 1;', values, (err, rows) => {
+        (0, db_1.getPool)().query('SELECT * FROM User WHERE username = ? LIMIT 1;', values, (err, rows) => {
             if (err)
                 return reject(err);
             if (rows == '' || rows == null || rows.length == 0)
@@ -13,7 +13,7 @@ const getByUsernameAndPassword = (values) => {
         });
     });
 };
-exports.getByUsernameAndPassword = getByUsernameAndPassword;
+exports.getByUsername = getByUsername;
 const insert = (values) => {
     return new Promise((resolve, reject) => {
         (0, db_1.getPool)().query('INSERT INTO User (username, password) VALUES (?, ?);', values, (err, rows) => {

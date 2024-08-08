@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { insert as session_insert } from '../models/sessions.model';
 import UserResource, {
-  getByUsernameAndPassword,
+  getByUsername,
   signout as signout_user,
   insert as user_insert,
 } from '../models/users.model';
@@ -38,14 +38,18 @@ const login = async (req: Request, res: Response) => {
     return res.status(400).json({ errors: validation.array() });
   }
 
-  // hash.update(user_data.username + user_data.password);
-  let hash = await bcrypt.hash(user_data.password, 12)
-  console.log("hash", hash)
   // Convert into object better suited to insert into database
-  let user_values = [[user_data.username], [hash]];
+  let user_values = [[user_data.username]];
 
-  getByUsernameAndPassword(user_values)
-    .then(() => {
+  getByUsername(user_values)
+    .then((result) => {
+      // Check password is valid, I guess
+      let valid = bcrypt.compareSync(user_data.password, result[0].password);
+      if (!valid) {
+        return res
+          .status(401)
+          .json({ status: 401, message: 'Invalid username or password' });
+      }
       // Create session and return that
       let token = crypto
         .createHash('sha512')
@@ -70,6 +74,7 @@ const login = async (req: Request, res: Response) => {
         });
     })
     .catch((err) => {
+      console.log(err)
       if (err == null) {
         return res
           .status(401)

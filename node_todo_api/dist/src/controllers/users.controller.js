@@ -36,13 +36,17 @@ const login = async (req, res) => {
     if (!validation.isEmpty()) {
         return res.status(400).json({ errors: validation.array() });
     }
-    // hash.update(user_data.username + user_data.password);
-    let hash = await bcrypt_1.default.hash(user_data.password, 12);
-    console.log("hash", hash);
     // Convert into object better suited to insert into database
-    let user_values = [[user_data.username], [hash]];
-    (0, users_model_1.getByUsernameAndPassword)(user_values)
-        .then(() => {
+    let user_values = [[user_data.username]];
+    (0, users_model_1.getByUsername)(user_values)
+        .then((result) => {
+        // Check password is valid, I guess
+        let valid = bcrypt_1.default.compareSync(user_data.password, result[0].password);
+        if (!valid) {
+            return res
+                .status(401)
+                .json({ status: 401, message: 'Invalid username or password' });
+        }
         // Create session and return that
         let token = crypto_1.default
             .createHash('sha512')
@@ -67,6 +71,7 @@ const login = async (req, res) => {
         });
     })
         .catch((err) => {
+        console.log(err);
         if (err == null) {
             return res
                 .status(401)

@@ -118,4 +118,4 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
 
       - name: Deploy Docker Image
-        run: gcloud run deploy rust-todo-api --image $IMAGE_NAME --region us-central1 --platform managed --port 5000
+        run: gcloud run deploy rust-todo-api --image $IMAGE_NAME --region us-central1 --platform managed --port 5001

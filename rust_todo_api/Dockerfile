@@ -8,7 +8,7 @@ RUN apk add --no-cache build-base musl-dev openssl-dev openssl
 WORKDIR /rust_todo_api
 
 # Copy over the Cargo.toml files to the shell project
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml ./
 
 # Build and cache the dependencies
 RUN mkdir src && echo "fn main() {}" > src/main.rs

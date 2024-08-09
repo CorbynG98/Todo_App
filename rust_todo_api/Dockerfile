@@ -29,6 +29,7 @@ FROM alpine AS runner
 # Copy the binary from the builder stage
 WORKDIR /rust_todo_api
 COPY --from=builder /rust_todo_api/target/release/rust_todo_api rust_todo_api
+COPY .env /rust_todo_api/.env
 
-EXPOSE 8080
-ENTRYPOINT ["./rust_todo_api", "-a", "0.0.0.0", "-p", "8080"]
+EXPOSE 5000
+ENTRYPOINT ["./rust_todo_api"]

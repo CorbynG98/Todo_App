@@ -18,6 +18,7 @@ use crate::services::session_service::{created_user_session as db_create_user_se
 
 #[post("/signin")]
 pub async fn signin(app_state: web::Data<AppState>, req_body: web::Json<AuthRequest>) -> HttpResponse {
+    println!("Seeing if we reach this lol");
     // Read the body from the json, so we can borrow this for further processing
     let body_data = &req_body.into_inner();
 

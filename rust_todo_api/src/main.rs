@@ -25,7 +25,7 @@ struct AppState {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     // Configure host and port for the server
-    let host = "127.0.0.1";
+    let host = "0.0.0.0";
     let port = 5001;
 
     // Load the .env file

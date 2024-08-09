@@ -24,15 +24,22 @@ struct AppState {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    // Configure host and port for the server
+    let host = "127.0.0.1";
+    let port = 5001;
+
     // Load the .env file
     dotenv().ok();
     // Configure DB so we can use it throughout the app
     let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    println!("Connecting to the database");
     let db_pool: MySqlPool = MySqlPoolOptions::new()
         .max_connections(10)
         .connect(&database_url)
         .await
         .unwrap();
+    println!("Database connected!");
+    println!("Configuring app_state and the HttpServer");
     // Create the app state
     let app_state = AppState { db_pool };
     // Start the server
@@ -46,7 +53,7 @@ async fn main() -> std::io::Result<()> {
                     .service(signout)
             )
     })
-    .bind(("127.0.0.1", 5000))?
+    .bind((host, port))?
     .run()
     .await
 }

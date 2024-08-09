@@ -31,5 +31,5 @@ WORKDIR /rust_todo_api
 COPY --from=builder /rust_todo_api/target/release/rust_todo_api rust_todo_api
 COPY .env /rust_todo_api/.env
 
-EXPOSE 5000
-ENTRYPOINT ["./rust_todo_api"]
+EXPOSE 5001
+ENTRYPOINT ["./rust_todo_api", "-a", "0.0.0.0", "-p", "5001"]

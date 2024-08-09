@@ -37,7 +37,7 @@ jobs:
   #       working-directory: ./rust_todo_api
 
   #   steps:
-  #     - uses: actions/checkout@v3
+  #     - uses: actions/checkout@v4
 
   #     - name: 'Create env file'
   #       run: |
@@ -63,7 +63,7 @@ jobs:
       id-token: 'write'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - id: 'auth'
         name: "Authenticate Google Cloud"
@@ -85,13 +85,6 @@ jobs:
           echo DATABASE_URL=${{ secrets.RUST_MYSQL_DB_URL }} >> .env
           cat .env
 
-      - name: 'Upload Build Artifact'
-        uses: actions/upload-artifact@v3
-        with:
-          name: built-code
-          path: ./dist
-          retention-days: 5
-
       - name: Build Docker Image
         run: docker build -f ./Dockerfile -t $IMAGE_NAME .
 
@@ -112,7 +105,7 @@ jobs:
       id-token: 'write'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - id: 'auth'
         name: "Authenticate Google Cloud"

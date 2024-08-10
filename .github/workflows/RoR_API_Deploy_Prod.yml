@@ -37,11 +37,11 @@ jobs:
       id-token: 'write'
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - id: 'auth'
       name: "Authenticate Google Cloud"
-      uses: 'google-github-actions/auth@v1'
+      uses: 'google-github-actions/auth@v2'
       with:
         workload_identity_provider: 'projects/731679007643/locations/global/workloadIdentityPools/github-actions/providers/rails-todo-identity-pool-github'
         service_account: github-actions@rails-todo-app-386721.iam.gserviceaccount.com
@@ -78,11 +78,11 @@ jobs:
       id-token: 'write'
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - id: 'auth'
       name: "Authenticate Google Cloud"
-      uses: 'google-github-actions/auth@v1'
+      uses: 'google-github-actions/auth@v2'
       with:
         workload_identity_provider: 'projects/731679007643/locations/global/workloadIdentityPools/github-actions/providers/rails-todo-identity-pool-github'
         service_account: github-actions@rails-todo-app-386721.iam.gserviceaccount.com

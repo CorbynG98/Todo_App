@@ -3,7 +3,6 @@ mod handlers { // Declare the handlers module
 }
 mod structs { // Declare the structs module
     pub mod auth_request;
-    pub mod signout_request;
     pub mod user_model;
     pub mod session_model;
 }
@@ -27,6 +26,7 @@ async fn main() -> std::io::Result<()> {
     // Configure host and port for the server
     let host = "0.0.0.0";
     let port = 5001;
+    println!("Starting server at http://{}:{}", host, port);
 
     // Load the .env file
     dotenv().ok();

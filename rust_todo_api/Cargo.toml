@@ -15,6 +15,7 @@ sha2                = "*"
 base64              = "*"
 hex                 = "*"
 chrono              = "*"
+regex               = "*"
 uuid                = { version = "*", features = ["v4"] }
 serde               = { version = "*", features = ["derive"] }
 sqlx                = { version = "*", features = ["runtime-async-std", "macros", "mysql"] }

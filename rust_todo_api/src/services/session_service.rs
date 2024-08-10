@@ -9,10 +9,19 @@ pub async fn created_user_session(db_pool: &MySqlPool, session_token: &str, crea
     )
     .execute(db_pool).await {
         Ok(_) => Ok(()),
-        Err(e) => {
-            // Print e to console
-            println!("{:?}", e);
+        Err(_) => {
             Err("Failed to create session")
         },
+    }
+}
+
+pub async fn remove_session(db_pool: &MySqlPool, hashed_session: &str) -> Result<(), &'static str> {
+    match sqlx::query!(
+        "DELETE FROM Session WHERE session_token = ?;",
+        hashed_session as &str,
+    )
+    .execute(db_pool).await {
+        Ok(_) => Ok(()),
+        Err(_) => Ok(()), // We don't care if the session doesn't exist, succeed anyway
     }
 }

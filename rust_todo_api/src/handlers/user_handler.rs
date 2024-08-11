@@ -1,27 +1,18 @@
 use actix_web::{web, HttpResponse, HttpRequest, Responder};
-use sha2::{Sha512, Digest};
 use validator::Validate;
 use chrono::offset::Utc;
 use chrono::DateTime;
 use std::time::SystemTime;
 use uuid::Uuid;
 use bcrypt;
-use hex;
 
 // Custom crate imports (shit defined in main.rs basically, at top near the mod thing)
 use crate::AppState;
 use crate::structs::auth_request::AuthRequest;
 use crate::structs::session_model::Session;
-use crate::structs::user_model::UserId;
 use crate::services::user_service::{get_by_username as db_get_by_username, create_user as db_create_user};
 use crate::services::session_service::{created_user_session as db_create_user_session, remove_session as db_remove_session};
-
-fn compute_sha512(input: &str) -> String {
-    let mut hasher = Sha512::new();
-    hasher.update(input.as_bytes());
-    let hashed_string: Vec<u8> = hasher.finalize().into_iter().collect();
-    return hex::encode(hashed_string);
-}
+use crate::utils::hash_utils::compute_sha512;
 
 pub async fn signin(app_state: web::Data<AppState>, req_body: web::Json<AuthRequest>) -> impl Responder {
     // Read the body from the json, so we can borrow this for further processing
@@ -103,12 +94,11 @@ pub async fn signup(app_state: web::Data<AppState>, req_body: web::Json<AuthRequ
     }
 }
 
-pub async fn signout(app_state: web::Data<AppState>, req: HttpRequest, user_id: Option<web::ReqData<UserId>>) -> impl Responder {// Attempt to extract the Authorization header from the request
+pub async fn signout(app_state: web::Data<AppState>, req: HttpRequest) -> impl Responder {// Attempt to extract the Authorization header from the request
     if let Some(authorization_header) = req.headers().get("Authorization") {
         let authorization_value = authorization_header.to_str().unwrap_or_default();
         // Hash authorization_value, then pass into function
         let hashed_hex = compute_sha512(&authorization_value);
-        println!("{:?}", user_id.unwrap().user_id);
 
         match db_remove_session(&app_state.db_pool, &hashed_hex).await {
             Ok(_) => HttpResponse::NoContent().into(),

@@ -10,16 +10,13 @@ actix-web           = "*"
 serde_json          = "*"
 dotenv              = "*"
 bcrypt              = "*"
-actix-web-validator = "*"
 sha2                = "*"
-base64              = "*"
 hex                 = "*"
 chrono              = "*"
 regex               = "*"
 futures             = "*"
 futures-util        = "*"
-actix-service       = "*"
 uuid                = { version = "*", features = ["v4"] }
 serde               = { version = "*", features = ["derive"] }
-sqlx                = { version = "*", features = ["runtime-async-std", "macros", "mysql"] }
+sqlx                = { version = "*", features = ["runtime-async-std", "macros", "mysql", "time"] }
 validator           = { version = "*", features = ["derive"] }

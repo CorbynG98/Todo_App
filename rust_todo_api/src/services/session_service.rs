@@ -1,5 +1,5 @@
 use sqlx::mysql::MySqlPool;
-use crate::structs::user_model::UserId;
+use crate::structs::session_model::Session;
 
 pub async fn created_user_session(db_pool: &MySqlPool, session_token: &str, created_at: &str, username: &str) -> Result<(), &'static str> {
     match sqlx::query!(
@@ -27,10 +27,10 @@ pub async fn remove_session(db_pool: &MySqlPool, hashed_session: &str) -> Result
     }
 }
 
-pub async fn verify_session(db_pool: &MySqlPool, hashed_session: &str) -> Result<UserId, &'static str> {
+pub async fn verify_session(db_pool: &MySqlPool, hashed_session: &str) -> Result<Session, &'static str> {
     match sqlx::query_as!(
-        UserId,
-        "SELECT user_id FROM Session WHERE session_token = ?",
+        Session,
+        "SELECT user_id as username, session_token FROM Session WHERE session_token = ?",
         hashed_session
     )
     .fetch_one(db_pool).await {

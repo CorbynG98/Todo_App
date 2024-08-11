@@ -6,13 +6,18 @@ mod structs { // Declare the structs module
     pub mod auth_request;
     pub mod user_model;
     pub mod session_model;
+    pub mod todo_model;
 }
 mod services { // Declare the persistence module
     pub mod user_service;
     pub mod session_service;
+    pub mod todo_service;
 }
 mod middleware { // Declare the middleware module
     pub mod auth_middleware;
+}
+mod utils { // Declare the utils module
+    pub mod hash_utils;
 }
 
 use actix_web::{web, App, HttpServer};
@@ -61,9 +66,9 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/todo")
                     .wrap(Auth)
-                    .route("/todo", web::get().to(get_todos))
-                    .route("/todo", web::post().to(create_todo))
-                    .route("/todo", web::post().to(delete_todo))
+                    .route("", web::get().to(get_todos))
+                    .route("", web::post().to(create_todo))
+                    .route("", web::delete().to(delete_todo))
                     .route("/toggleComplete", web::post().to(toggle_complete))
                     .route("/clearComplete", web::post().to(clear_complete))
             )

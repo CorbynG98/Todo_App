@@ -8,11 +8,11 @@ use actix_web::{
     body::EitherBody
 };
 use futures_util::future::LocalBoxFuture;
-use sha2::{Sha512, Digest};
 use serde::{Deserialize, Serialize};
 use futures::executor;
 // Custom crate imports
 use crate::services::session_service::{verify_session as db_verify_session};
+use crate::utils::hash_utils::compute_sha512;
 use crate::AppState;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -31,13 +31,6 @@ impl<T> ResponseBody<T> {
 }
 
 pub struct Auth;
-
-fn compute_sha512(input: &str) -> String {
-    let mut hasher = Sha512::new();
-    hasher.update(input.as_bytes());
-    let hashed_string: Vec<u8> = hasher.finalize().into_iter().collect();
-    return hex::encode(hashed_string);
-}
 
 impl<S, B> Transform<S, ServiceRequest> for Auth
 where

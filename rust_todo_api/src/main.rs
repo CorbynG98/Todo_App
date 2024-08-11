@@ -75,7 +75,7 @@ async fn main() -> std::io::Result<()> {
                     .route("", web::get().to(get_todos))
                     .route("", web::post().to(create_todo))
                     .route("{todo_id}", web::delete().to(delete_todo).wrap(TodoId))
-                    .route("/toggleComplete/{todo_id}", web::post().to(toggle_complete).wrap(TodoId))
+                    .route("{todo_id}/toggleComplete", web::post().to(toggle_complete).wrap(TodoId))
                     .route("/clearCompleted", web::post().to(clear_complete))
             )
     })

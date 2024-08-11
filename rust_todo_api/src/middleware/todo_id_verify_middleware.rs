@@ -3,7 +3,6 @@ use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
     Error,
     HttpResponse,
-    HttpMessage,
     web::Data,
     body::EitherBody
 };
@@ -11,8 +10,7 @@ use futures_util::future::LocalBoxFuture;
 use serde::{Deserialize, Serialize};
 use futures::executor;
 // Custom crate imports
-use crate::services::session_service::{verify_session as db_verify_session};
-use crate::utils::hash_utils::compute_sha512;
+use crate::services::todo_service::{get_todo_by_id as db_get_todo_by_id};
 use crate::AppState;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -30,9 +28,9 @@ impl<T> ResponseBody<T> {
     }
 }
 
-pub struct Auth;
+pub struct TodoId;
 
-impl<S, B> Transform<S, ServiceRequest> for Auth
+impl<S, B> Transform<S, ServiceRequest> for TodoId
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -41,19 +39,19 @@ where
     type Response = ServiceResponse<EitherBody<B>>;
     type Error = Error;
     type InitError = ();
-    type Transform = AuthMiddleware<S>;
+    type Transform = TodoIdMiddleware<S>;
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ready(Ok(AuthMiddleware { service }))
+        ready(Ok(TodoIdMiddleware { service }))
     }
 }
 
-pub struct AuthMiddleware<S> {
+pub struct TodoIdMiddleware<S> {
     service: S,
 }
 
-impl<S, B> Service<ServiceRequest> for AuthMiddleware<S>
+impl<S, B> Service<ServiceRequest> for TodoIdMiddleware<S>
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
     S::Future: 'static,
@@ -66,15 +64,13 @@ where
     forward_ready!(service);
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
-        let binding = req.headers().clone();
-        let auth_header = binding.get("Authorization").map(|v| v.to_str().unwrap_or_default());
+        let todo_id: String = req.match_info().query("todo_id").to_string();
+
         // Make the variables we need for session verification function
-        let hashed_hex = compute_sha512(&auth_header.unwrap());
         let app_state = req.app_data::<Data<AppState>>().unwrap();
         // Do the DB stuff, synchronously
-        match executor::block_on(db_verify_session(&app_state.db_pool, &hashed_hex)) {
-            Ok(user_id) => {
-                req.extensions_mut().insert(user_id);
+        match executor::block_on(db_get_todo_by_id(&app_state.db_pool, &todo_id)) {
+            Ok(_) => {
                 let fut = self.service.call(req);
                 Box::pin(async move {
                     fut.await.map(ServiceResponse::map_into_left_body)
@@ -82,7 +78,7 @@ where
             },
             Err(_) => {
                 let (request, _pl) = req.into_parts(); // Hvae to break this when we use it, otherwise it fucks everything else
-                let response = HttpResponse::Unauthorized().json("Invalid auth token").map_into_right_body();
+                let response = HttpResponse::Unauthorized().json("Invalid todo id").map_into_right_body();
                 return Box::pin(async { Ok(ServiceResponse::new(request, response)) });
             }
         }

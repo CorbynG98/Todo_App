@@ -40,7 +40,7 @@ ENGINE = InnoDB;
 CREATE TABLE `Todo`
 (
   todo_id VARCHAR
-(128) NOT NULL,
+(64) NOT NULL,
   created_at DATETIME NOT NULL,
   title VARCHAR
 (256) NOT NULL,

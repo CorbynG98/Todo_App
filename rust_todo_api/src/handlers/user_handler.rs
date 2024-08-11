@@ -1,4 +1,4 @@
-use actix_web::{post, web, HttpResponse, HttpRequest};
+use actix_web::{web, HttpResponse, HttpRequest, Responder};
 use sha2::{Sha512, Digest};
 use validator::Validate;
 use chrono::offset::Utc;
@@ -12,6 +12,7 @@ use hex;
 use crate::AppState;
 use crate::structs::auth_request::AuthRequest;
 use crate::structs::session_model::Session;
+use crate::structs::user_model::UserId;
 use crate::services::user_service::{get_by_username as db_get_by_username, create_user as db_create_user};
 use crate::services::session_service::{created_user_session as db_create_user_session, remove_session as db_remove_session};
 
@@ -22,8 +23,7 @@ fn compute_sha512(input: &str) -> String {
     return hex::encode(hashed_string);
 }
 
-#[post("/signin")]
-pub async fn signin(app_state: web::Data<AppState>, req_body: web::Json<AuthRequest>) -> HttpResponse {
+pub async fn signin(app_state: web::Data<AppState>, req_body: web::Json<AuthRequest>) -> impl Responder {
     // Read the body from the json, so we can borrow this for further processing
     let body_data = &req_body.into_inner();
 
@@ -64,8 +64,7 @@ pub async fn signin(app_state: web::Data<AppState>, req_body: web::Json<AuthRequ
     }
 }
 
-#[post("/signup")]
-pub async fn signup(app_state: web::Data<AppState>, req_body: web::Json<AuthRequest>) -> HttpResponse {
+pub async fn signup(app_state: web::Data<AppState>, req_body: web::Json<AuthRequest>) -> impl Responder {
     // Read the body from the json, so we can borrow this for further processing
     let body_data = &req_body.into_inner();
 
@@ -104,12 +103,12 @@ pub async fn signup(app_state: web::Data<AppState>, req_body: web::Json<AuthRequ
     }
 }
 
-#[post("/signout")]
-pub async fn signout(app_state: web::Data<AppState>, req:HttpRequest) -> HttpResponse {// Attempt to extract the Authorization header from the request
+pub async fn signout(app_state: web::Data<AppState>, req: HttpRequest, user_id: Option<web::ReqData<UserId>>) -> impl Responder {// Attempt to extract the Authorization header from the request
     if let Some(authorization_header) = req.headers().get("Authorization") {
         let authorization_value = authorization_header.to_str().unwrap_or_default();
         // Hash authorization_value, then pass into function
         let hashed_hex = compute_sha512(&authorization_value);
+        println!("{:?}", user_id.unwrap().user_id);
 
         match db_remove_session(&app_state.db_pool, &hashed_hex).await {
             Ok(_) => HttpResponse::NoContent().into(),

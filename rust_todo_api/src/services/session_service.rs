@@ -1,4 +1,5 @@
 use sqlx::mysql::MySqlPool;
+use crate::structs::user_model::UserId;
 
 pub async fn created_user_session(db_pool: &MySqlPool, session_token: &str, created_at: &str, username: &str) -> Result<(), &'static str> {
     match sqlx::query!(
@@ -23,5 +24,17 @@ pub async fn remove_session(db_pool: &MySqlPool, hashed_session: &str) -> Result
     .execute(db_pool).await {
         Ok(_) => Ok(()),
         Err(_) => Ok(()), // We don't care if the session doesn't exist, succeed anyway
+    }
+}
+
+pub async fn verify_session(db_pool: &MySqlPool, hashed_session: &str) -> Result<UserId, &'static str> {
+    match sqlx::query_as!(
+        UserId,
+        "SELECT user_id FROM Session WHERE session_token = ?",
+        hashed_session
+    )
+    .fetch_one(db_pool).await {
+        Ok(row) => Ok(row),
+        Err(_) => Err("Invalid session token"),
     }
 }

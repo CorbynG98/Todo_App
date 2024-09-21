@@ -42,6 +42,7 @@ jobs:
         env:
             "apiUrlRails": ${{ secrets.API_URL_RAILS }}
             "apiUrlNode": ${{ secrets.API_URL_NODE }}
+            "apiUrlRust": ${{ secrets.API_URL_RUST }}
 
       - name: npm ci, build
         run: |

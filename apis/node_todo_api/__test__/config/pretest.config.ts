@@ -35,9 +35,10 @@ const testDbConnection = () => {
 const rebuildDatabase = () => {
   return new Promise<void>((resolve, reject) => {
     fs.readFile(
-      'resources/database/test/create_test_database.sql',
+      'resources/create_test_database.sql',
       (read_err, read_result) => {
         if (read_err) {
+          console.log(read_err)
           console.log('Unable to read create_database.sql');
           return reject();
         }
@@ -84,12 +85,12 @@ const resetDatabase = () => {
       .then(() => rebuildDatabase())
       .then(() =>
         resampleDatabase(
-          'resources/database/test/sample_data/resample_users.sql',
+          'resources/sample_data/resample_users.sql',
         ),
       )
       .then(() =>
         resampleDatabase(
-          'resources/database/test/sample_data/resample_todos.sql',
+          'resources/sample_data/resample_todos.sql',
         ),
       )
       .then(() => {

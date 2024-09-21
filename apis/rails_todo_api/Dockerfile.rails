@@ -1,8 +1,14 @@
+# Setup ruby environment
 FROM ruby:3.2.2
 RUN apt-get update && apt-get install -y nodejs
 WORKDIR /app
+# Install gems
 COPY Gemfile* ./
 RUN bundle install
+# Copy code
 COPY . .
+# Setup ports
+ENV PORT=5000 
 EXPOSE 5000
+# Start
 CMD ["rails", "server", "--environment=production", "-b", "0.0.0.0"]

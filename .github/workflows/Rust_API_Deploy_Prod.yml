@@ -58,7 +58,6 @@ jobs:
           rm -rf .env
           touch .env
           echo "DATABASE_URL=mysql://${{ secrets.MYSQL_USER }}:${{ secrets.MYSQL_PASSWORD }}@${{ secrets.MYSQL_HOST }}/${{ secrets.MYSQL_DATABASE }}" > .env
-          cat .env
 
       - name: Build Docker Image
         run: docker build -f ./Dockerfile -t $IMAGE_NAME .

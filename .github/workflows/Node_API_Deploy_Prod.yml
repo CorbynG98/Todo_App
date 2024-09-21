@@ -52,7 +52,6 @@ jobs:
           echo MYSQL_HOST=${{ secrets.MYSQL_HOST }} >> .test.env
           echo MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> .test.env
           echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .test.env
-          cat .test.env
 
       - run: npm ci
 

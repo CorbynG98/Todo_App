@@ -1,4 +1,4 @@
-name: Rails Api GCP Cloud Run Deploy
+name: Rails Build And Deploy
 
 on:
   workflow_dispatch:
@@ -67,7 +67,7 @@ jobs:
         echo "  adapter: mysql2" >> config/database.yml
         echo "  encoding: utf8" >> config/database.yml
         echo "  pool: 5" >> config/database.yml
-        echo "  username: ${{ secrets.MYSQL_USERNAME }}" >> config/database.yml
+        echo "  username: ${{ secrets.MYSQL_USER }}" >> config/database.yml
         echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> config/database.yml
         echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> config/database.yml
         echo "  host: ${{ secrets.MYSQL_HOST }}" >> config/database.yml

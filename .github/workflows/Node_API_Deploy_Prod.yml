@@ -1,4 +1,4 @@
-name: Express.JS Build and Test
+name: Node Build And Deploy
 
 on:
   workflow_dispatch:

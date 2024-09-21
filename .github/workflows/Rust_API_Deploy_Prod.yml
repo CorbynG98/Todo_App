@@ -1,4 +1,4 @@
-name: Rust API Deploy Prod
+name: Rust Build And Deploy
 
 on:
   workflow_dispatch:
@@ -57,7 +57,7 @@ jobs:
         run: |
           rm -rf .env
           touch .env
-          echo "DATABASE_URL=mysql://${{ secrets.MYSQL_USERNAME }}:${{ secrets.MYSQL_PASSWORD }}@${{ secrets.MYSQL_HOST }}/${{ secrets.MYSQL_DATABASE }}" > .env
+          echo "DATABASE_URL=mysql://${{ secrets.MYSQL_USER }}:${{ secrets.MYSQL_PASSWORD }}@${{ secrets.MYSQL_HOST }}/${{ secrets.MYSQL_DATABASE }}" > .env
           cat .env
 
       - name: Build Docker Image

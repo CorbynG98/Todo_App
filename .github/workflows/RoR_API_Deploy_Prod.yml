@@ -10,11 +10,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'rails_todo_api/**'
+      - '/apis/rails_todo_api/**'
   pull_request:
     branches: [ main ]
     paths:
-      - 'rails_todo_api/**'
+      - '/apis/rails_todo_api/**'
 
 env:
   REGISTRY: us-central1-docker.pkg.dev
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./api/rails_todo_api
+        working-directory: ./apis/rails_todo_api
 
     permissions:
       contents: 'read'
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./api/rails_todo_api
+        working-directory: ./apis/rails_todo_api
 
     permissions:
       contents: 'read'

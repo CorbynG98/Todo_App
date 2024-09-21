@@ -10,11 +10,11 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '/apis/rails_todo_api/**'
+      - 'apis/rails_todo_api/**'
   pull_request:
     branches: [ main ]
     paths:
-      - '/apis/rails_todo_api/**'
+      - 'apis/rails_todo_api/**'
 
 env:
   REGISTRY: us-central1-docker.pkg.dev

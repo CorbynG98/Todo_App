@@ -14,14 +14,10 @@ type appInitData = {
   username: string | null;
   token: string | null;
   apiType: string | null;
-  cookieName: string | null;
 };
 
 type apiTypeChangeData = {
   apiType: string | null;
-  cookieName: string | null;
-  username: string | null;
-  token: string | null;
 };
 
 type signinData = {
@@ -37,15 +33,14 @@ export type Action =
 
 export const initBaseData =
   (): ThunkAction<void, State, unknown, Action> => async (dispatch) => {
+    const authData = await getCookie('authData');
     const apiData = await getCookie('apiData');
-    const authData = await getCookie(apiData?.cookieName ?? 'railsAuthData');
     dispatch({
       type: 'APP_INIT',
       data: {
         username: authData?.username,
         token: authData?.token,
         apiType: apiData?.apiType,
-        cookieName: apiData?.cookieName,
       },
     });
   };
@@ -58,12 +53,7 @@ export const signIn =
   async (dispatch) => {
     // Do some other stuff here to actually call API to login
     var result = await Authenticate(loginData, cancelToken);
-    const apiData = await getCookie('apiData');
-    await setAuthDataCookie(
-      result.username ?? '',
-      result.session_token ?? '',
-      apiData?.cookieName ?? 'railsAuthData',
-    );
+    await setAuthDataCookie(result.username ?? '', result.session_token ?? '');
     dispatch({
       type: 'SIGN_IN',
       data: {
@@ -81,12 +71,7 @@ export const signUp =
   async (dispatch) => {
     // Do some other stuff here to actually call API to login
     var result = await Signup(loginData, cancelToken);
-    const apiData = await getCookie('apiData');
-    await setAuthDataCookie(
-      result.username ?? '',
-      result.session_token ?? '',
-      apiData?.cookieName ?? 'railsAuthData',
-    );
+    await setAuthDataCookie(result.username ?? '', result.session_token ?? '');
     dispatch({
       type: 'SIGN_IN',
       data: {
@@ -100,12 +85,11 @@ export const changeApiType =
   (newApiType: string): ThunkAction<void, State, unknown, Action> =>
   async (dispatch) => {
     // Do some other stuff here to actually call API to login
-    var data = { apiType: newApiType, cookieName: `${newApiType}AuthData` };
-    var authData = await getCookie(data.cookieName);
-    await setApiDataCookie(data.apiType, data.cookieName);
+    var data = { apiType: newApiType };
+    await setApiDataCookie(data.apiType);
     dispatch({
       type: 'CHANGE_API_TYPE',
-      data: { ...data, username: authData?.username, token: authData?.token },
+      data: data,
     });
   };
 
@@ -114,16 +98,15 @@ export const signOut =
     cancelToken: CancelTokenSource | undefined | null = null,
   ): ThunkAction<void, State, unknown, Action> =>
   async (dispatch) => {
-    const apiData = await getCookie('apiData');
-    let cookie = await getCookie(apiData?.cookieName ?? 'railsAuthData');
+    let cookie = await getCookie('authData');
     if (cookie == null) return; // Don't logout if we aren't logged in?
     // Do some stuff here to revoke the access token api side
     Signout(cancelToken)
       .then(() => {
-        removeCookie(apiData?.cookieName ?? 'railsAuthData');
+        removeCookie('authData');
       })
       .catch(() => {
-        removeCookie(apiData?.cookieName ?? 'railsAuthData');
+        removeCookie('authData');
         /* Ignoring this, signout not relevant for failure, just remove cookie anyway */
       });
     dispatch({ type: 'SIGN_OUT' });

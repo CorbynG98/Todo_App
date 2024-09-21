@@ -187,8 +187,9 @@ function TodoPage() {
                   return (
                     <li
                       key={todoItem.id}
-                      className={`todo-item ${todoItem.completed ? 'completed' : ''
-                        }`}>
+                      className={`todo-item ${
+                        todoItem.completed ? 'completed' : ''
+                      }`}>
                       <div className='list-item'>
                         <input
                           className='check'

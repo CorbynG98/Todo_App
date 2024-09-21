@@ -25,20 +25,23 @@ function NavBar() {
         return 'NodeJS';
       case 'rails':
         return 'Rails';
+      case 'rust':
+        return 'Rust';
       default:
-        return 'Rails';
+        return 'Rust';
     }
   };
 
   const handleApiTypeChange = (
     newValue: SingleValue<{ value: string; label: string }>,
   ) => {
-    store.dispatch(changeApiType(newValue?.value ?? 'rails'));
+    store.dispatch(changeApiType(newValue?.value ?? 'rust'));
   };
 
   const options = [
     { value: 'node', label: getApiTypeLabel('node') },
     { value: 'rails', label: getApiTypeLabel('rails') },
+    { value: 'rust', label: getApiTypeLabel('rust') },
   ];
 
   return (

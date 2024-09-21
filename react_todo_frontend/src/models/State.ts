@@ -3,6 +3,5 @@ type State = {
   token: string | undefined | null;
   isLoggedIn: boolean;
   apiType: string;
-  cookieName: string;
 };
 export type { State };

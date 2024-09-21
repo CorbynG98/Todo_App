@@ -4,7 +4,7 @@ import app from './src/config/express';
 // Configure dotenv so we can load variables from .env file
 dotenv.config({ path: '.production.env' });
 // Configure port
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Test connection to MySQL on start-up
 async function testDbConnection() {

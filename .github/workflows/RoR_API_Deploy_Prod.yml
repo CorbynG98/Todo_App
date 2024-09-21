@@ -106,4 +106,4 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
 
     - name: Deploy Docker Image
-      run: gcloud run deploy rails-todo-api --image $IMAGE_NAME --region us-central1 --platform managed --port 8080
+      run: gcloud run deploy rails-todo-api --image $IMAGE_NAME --region us-central1 --platform managed --port 5000

@@ -155,4 +155,4 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
 
       - name: Deploy Docker Image
-        run: gcloud run deploy node-todo-api --image $IMAGE_NAME --region us-central1 --platform managed --port 5000
+        run: gcloud run deploy node-todo-api --image $IMAGE_NAME --region us-central1 --platform managed --port 5001

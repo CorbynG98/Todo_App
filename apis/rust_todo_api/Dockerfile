@@ -22,5 +22,5 @@ WORKDIR /app
 COPY --from=builder /rust_todo_api/target/release/rust_todo_api rust_todo_api
 COPY .env /app/.env
 
-EXPOSE 5000
+EXPOSE 5002
 CMD ["/app/rust_todo_api"]

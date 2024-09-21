@@ -8,6 +8,6 @@ RUN npm ci --omit=dev
 # Bundle app source
 COPY . .
 # Exposing server port
-EXPOSE 5000
+EXPOSE 5001
 # Starting our application
 CMD [ "npm", "start" ]

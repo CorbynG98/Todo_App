@@ -1,4 +1,4 @@
-class SessionDto
+class Dto::SessionDto
   attr_accessor :username, :session_token, :created_at
 
   def initialize(session = {})

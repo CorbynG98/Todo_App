@@ -81,6 +81,9 @@ Rails.application.configure do
   # Set the correct database configuration
   config.database_configuration = "production"
 
+  # Set port for the run
+  config.server_port = 5000
+
   # Use a different logger for distributed setups.
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")

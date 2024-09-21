@@ -1,7 +1,7 @@
 require 'google/cloud/firestore'
 require 'active_record'
 require 'securerandom'
-require_relative '../models/dto/todo.dto'
+require_relative '../models/dto/todo_dto'
 
 class TodoService
     attr_accessor :all

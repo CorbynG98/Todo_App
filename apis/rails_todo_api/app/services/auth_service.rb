@@ -2,7 +2,7 @@ require 'google/cloud/firestore'
 require 'securerandom'
 require 'bcrypt'
 require 'active_record'
-require_relative '../models/dto/session.dto'
+require_relative '../models/dto/session_dto'
 
 class AuthService
     attr_accessor :all

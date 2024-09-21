@@ -1,4 +1,4 @@
-class TodoDto
+class Dto::TodoDto
     attr_accessor :id, :title, :completed, :created_at
 
     def initialize(todo_id:, todo:)

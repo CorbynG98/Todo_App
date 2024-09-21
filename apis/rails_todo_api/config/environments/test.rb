@@ -54,6 +54,9 @@ Rails.application.configure do
 
   # Set the correct database configuration
   config.database_configuration = "test"
+
+  # Set port for the run
+  config.server_port = 5000
   
   Google::Cloud.configure do |config|
     # Shared project_id and keyfile

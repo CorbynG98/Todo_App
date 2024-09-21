@@ -21,7 +21,7 @@ class V1::TodoController < V1::ApplicationController
     result = get_services.todo_service.toggle_complete(params[:id], @session[:user_id]) if params[:id].present?
     if result == false then render json: { error: 'Unable to toggle this todo item' }, status: :bad_request end
   end
-
+ 
   def clearcompleted
     result = get_services.todo_service.clear_completed(@session[:user_id])
     if result == false then render json: { error: 'Unable to clear completed todo items' }, status: :bad_request end

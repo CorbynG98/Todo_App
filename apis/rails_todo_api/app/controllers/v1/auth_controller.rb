@@ -1,6 +1,6 @@
 class V1::AuthController < V1::ApplicationController
-  before_action :get_services, only:  %i[signup, signout, signin]
-  before_action :verify_auth_token, only: %i[signout]
+  before_action :get_services, only: [:signup, :signout, :signin]
+  before_action :verify_auth_token, only: [:signout]
 
   def signup
     session = get_services.auth_service.signup(params[:username], params[:password])

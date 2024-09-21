@@ -7,8 +7,18 @@ class TodoService
     attr_accessor :all
 
     def get_todos(user_id)
-        todos = Todo.where(user_id: user_id).order(created_at: :asc).all
-        todos.empty? ? [] : todos
+        begin
+            todos = Todo.where(user_id: user_id).order(created_at: :asc).all
+            todos.empty? ? [] : todos
+        rescue ActiveRecord::RecordInvalid => e
+            err = "Failed to get todos"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        rescue ActiveRecord::StatementInvalid => e
+            err = "SQL Error: Failed to get todos"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        end
     end
 
     def save_todo(title, user_id)
@@ -22,41 +32,66 @@ class TodoService
             return todo_dto if todo&.persisted?
             nil
         rescue ActiveRecord::RecordInvalid => e
-            Rails.logger.error "Failed to create new todo: #{e}"
-            "Failed to create the new todo"
+            err = "Failed to create todo"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        rescue ActiveRecord::StatementInvalid => e
+            err = "SQL Error: Failed to create todo"
+            Rails.logger.error "#{err}: #{e}"
+            err
         end
     end
 
     def toggle_complete(_id, _user_id)
-        todo_ref = @firestore.col("Todo").doc(_id)
-        # Check if this todo item belongs to the user
-        todo = todo_ref.get
-        if todo.exists? == false then return false 
-        elsif todo.data[:user_id] != _user_id then return false end
-        # Update it if other checks passed
-        todo_ref.update({completed: !todo.data[:completed]})
-        return true
-    end
-
-    def remove(_id, _user_id)
-        todo_ref = @firestore.col("Todo").doc(_id)
-        # Check if this todo item belongs to the user
-        todo = todo_ref.get
-        if todo.exists? == false then return false
-        elsif todo.data[:user_id] != _user_id then return false end
-        # Delete it if other checks passed
-        todo_ref.delete
-        return true
+        begin
+            todo = Todo.find_by(todo_id: _id)
+            return false if todo.nil? || todo.user_id != _user_id
+            
+            todo.update(completed: !todo.completed)
+            return true
+        rescue ActiveRecord::RecordInvalid => e
+            err = "Failed to create todo"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        rescue ActiveRecord::StatementInvalid => e
+            err = "SQL Error: Failed to create todo"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        end
     end
 
     def clear_completed(_user_id)
-        todos_ref = @firestore.col("Todo").where("user_id", "=", _user_id).where("completed", "=", true).order(:created_at, :asc)
-        # Loop through and delete all
-        todos_ref.get do |todo_ref|
-            todo_solo_ref = @firestore.col("Todo").doc(todo_ref.document_id)
-            todo_solo_ref.delete
+        begin
+            todos = Todo.where(user_id: _user_id, completed: true).order(created_at: :asc)
+            
+            todos.each(&:destroy)
+            return true
+        rescue ActiveRecord::RecordInvalid => e
+            err = "Failed to clear complete todos"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        rescue ActiveRecord::StatementInvalid => e
+            err = "SQL Error: Failed to clear complete todos"
+            Rails.logger.error "#{err}: #{e}"
+            err
         end
+    end
 
-        return true
+    def remove(_id, _user_id)
+        begin
+            todo = Todo.find_by(todo_id: _id)
+            return false if todo.nil? || todo.user_id != _user_id
+            
+            todo.destroy
+            return true
+        rescue ActiveRecord::RecordInvalid => e
+            err = "Failed to remove todo"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        rescue ActiveRecord::StatementInvalid => e
+            err = "SQL Error: Failed to remove todo"
+            Rails.logger.error "#{err}: #{e}"
+            err
+        end
     end
 end

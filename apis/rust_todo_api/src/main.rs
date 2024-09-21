@@ -75,8 +75,8 @@ async fn main() -> std::io::Result<()> {
                     .route("", web::get().to(get_todos))
                     .route("", web::post().to(create_todo))
                     .route("{todo_id}", web::delete().to(delete_todo).wrap(TodoId))
-                    .route("{todo_id}/toggleComplete", web::post().to(toggle_complete).wrap(TodoId))
-                    .route("/clearCompleted", web::post().to(clear_complete))
+                    .route("{todo_id}/togglecomplete", web::post().to(toggle_complete).wrap(TodoId))
+                    .route("/clearcompleted", web::post().to(clear_complete))
             )
     })
     .bind((host, port))?

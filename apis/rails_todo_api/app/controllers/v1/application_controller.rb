@@ -7,7 +7,8 @@ class CombinedService
     end
 end
 
-class V1::ApplicationController < ActionController::API  
+class V1::ApplicationController < ActionController::API
+    before_action :get_services, only: [:verify_auth_token]
     private
     def get_services
         @combined_service ||= CombinedService.new

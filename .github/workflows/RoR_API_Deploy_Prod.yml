@@ -72,6 +72,13 @@ jobs:
         echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> config/database.yml
         echo "  host: ${{ secrets.MYSQL_HOST }}" >> config/database.yml
 
+      - name: Upload production-ready build files
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-rails-files
+          path: .apis/rails_todo_api
+          if-no-files-found: error
+
     - name: Build Docker Image
       run: docker build -f ./Dockerfile.rails -t $IMAGE_NAME .
 

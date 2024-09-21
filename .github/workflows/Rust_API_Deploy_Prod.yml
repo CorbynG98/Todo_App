@@ -56,16 +56,9 @@ jobs:
       - name: 'Create env file'
         run: |
           rm -rf .env
-          touch .envrun: |
+          touch .env
           echo "DATABASE_URL=mysql://${{ secrets.MYSQL_USERNAME }}:${{ secrets.MYSQL_PASSWORD }}@${{ secrets.MYSQL_HOST }}/${{ secrets.MYSQL_DATABASE }}" > .env
           cat .env
-
-      - name: Uppload env file for checking
-        uses: actions/upload-artifact@v3
-        with:
-          name: rust-env-files
-          path: ./
-          if-no-files-found: error
 
       - name: Build Docker Image
         run: docker build -f ./Dockerfile -t $IMAGE_NAME .

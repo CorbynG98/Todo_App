@@ -27,7 +27,6 @@ env:
 jobs:
   build:
     name: Build
-    environment: Production
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -68,7 +67,6 @@ jobs:
 
   deploy:
     name: Deploy
-    environment: Production
     needs: build
     runs-on: ubuntu-latest
     defaults:

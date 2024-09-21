@@ -76,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: test-rails-files
-        path: .apis/rails_todo_api
+        path: ./apis/rails_todo_api
         if-no-files-found: error
 
     - name: Build Docker Image

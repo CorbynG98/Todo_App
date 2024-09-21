@@ -68,6 +68,8 @@ jobs:
         echo "  adapter: mysql2" >> config/database.yml
         echo "  encoding: utf8" >> config/database.yml
         echo "  pool: 5" >> config/database.yml
+        echo "production" >> config/database.yml
+        echo "  <<: *default" >> config/database.yml
         echo "  username: ${{ secrets.MYSQL_USER }}" >> config/database.yml
         echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> config/database.yml
         echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> config/database.yml

@@ -51,6 +51,9 @@ Rails.application.configure do
 
   # Allow custom domain host
   config.hosts << "rails-todo-api.corbyngreenwood.com"
+
+  # Set the correct database configuration
+  config.database_configuration = "test"
   
   Google::Cloud.configure do |config|
     # Shared project_id and keyfile

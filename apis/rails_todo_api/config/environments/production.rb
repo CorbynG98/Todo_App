@@ -78,6 +78,9 @@ Rails.application.configure do
   # Allow custom domain host
   config.hosts << "rails-todo-api.corbyngreenwood.com"
 
+  # Set the correct database configuration
+  config.database_configuration = "production"
+
   # Use a different logger for distributed setups.
   # require "syslog/logger"
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new "app-name")

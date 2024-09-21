@@ -1,18 +1,20 @@
 require 'google/cloud/firestore'
 require 'securerandom'
-require 'json'
 require 'bcrypt'
 require 'active_record'
+require_relative '../models/dto/session.dto'
 
 class AuthService
     attr_accessor :all
 
     def initialize
-        # Load the default database configuration from database.yml
-        db_config = YAML.load_file(File.expand_path('../../config/database.yml', __dir__))['default']
-
-        # Establish the ActiveRecord connection using the default settings
-        ActiveRecord::Base.establish_connection(db_config)
+        puts "AuthService initialize"
+        begin
+            db_config = YAML.load_file(File.expand_path('../../config/database.yml', __dir__), aliases: true)['default']
+            ActiveRecord::Base.establish_connection(db_config)
+        rescue => e
+            puts "Error in initialize: #{e.message}"
+        end
     end
 
     def signup(_username, _password)
@@ -20,16 +22,17 @@ class AuthService
         return nil if existing_user
         
         new_user = User.create(username: _username, password: _password)
-        return nil unless new_user.persisted?
+        return nil unless new_user&.persisted?
         
         session_token = Digest::SHA512.hexdigest(SecureRandom.uuid)
-        hashed_session_token = Digest::SHA512.hexdigest(session_token)
       
         # Create the session using the method defined in the Session model
-        session = Session.create(session_token: hashed_session_token, user_id: user.username, created_at: Time.now.utc)
+        session = Session.create_session(session_token: session_token, user_id: user.username)
+
+        # Create sessionDto to return
+        session_dto = SessionDto.new({session_token: session_token, username: user.username})
       
-        return session if session.persisted?
-        nil  # Return nil if the session creation failed
+        return session_dto
     end
 
     def signin(_username, _password)
@@ -38,14 +41,16 @@ class AuthService
       
         # Check if the provided password matches the stored hashed password using BCrypt
         if BCrypt::Password.new(user.password) == _password
-            session_token = SecureRandom.uuid  # Use raw UUID for session token
-            hashed_session_token = Digest::SHA512.hexdigest(session_token)
+            session_token = Digest::SHA512.hexdigest(SecureRandom.uuid)
       
             # Create the session using the method defined in the Session model
-            
-            session = Session.create(session_token: hashed_session_token, user_id: user.username, created_at: Time.now.utc)
-            return session if session.persisted?
-            nil  # Return nil if the session creation failed
+            session = Session.create_session(session_token: session_token, user_id: user.username)
+
+            # Create sessionDto to return
+            session_dto = SessionDto.new({session_token: session_token, username:  user.username})
+
+            return session_dto if session&.persisted?
+            nil
         else
           return nil
         end

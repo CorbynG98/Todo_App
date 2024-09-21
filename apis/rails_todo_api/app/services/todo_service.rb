@@ -1,35 +1,40 @@
 require 'google/cloud/firestore'
+require 'active_record'
+require 'securerandom'
+require_relative '../models/dto/todo.dto'
 
 class TodoService
-    def initialize
-        file_path = File.expand_path('../resources/appsettings.json', File.dirname(__FILE__))
-        file = File.read(file_path)
-        data_hash = JSON.parse(file)
+    attr_accessor :all
 
-        @firestore = Google::Cloud::Firestore.new project_id: data_hash["GCP"]["ProjectId"],
-            keyfile: Rails.application.credentials.keyfile # Hoping this stays as nil if no keyfile found. We only need this when running locally.
+    def initialize
+        puts "TodoService initialize"
+        begin
+            db_config = YAML.load_file(File.expand_path('../../config/database.yml', __dir__), aliases: true)['default']
+            ActiveRecord::Base.establish_connection(db_config)
+        rescue => e
+            puts "Error in initialize: #{e.message}"
+        end
     end
 
     def get_todos(user_id)
-        all = []
-        todos_ref = @firestore.col("Todo").where("user_id", "=", user_id).order(:created_at, :asc)
-
-        todos_ref.get do |todo_ref|
-            all << Todo.new(todo_ref.document_id, todo_ref.data)
-        end
-        return all
+        todos = Todo.where(user_id: user_id).order(created_at: :asc).all
+        todos.empty? ? [] : todos
     end
 
-    def save_todo(_title, _user_id)
-        result = @firestore.col("Todo").add({
-            title: _title,
-            user_id: _user_id,
-            created_at: Time.now,
-            completed: false
-        })
-
-        new_todo = Todo.new(result.document_id, {title: _title, user_id: _user_id, created_at: Time.now, completed: false})
-        return new_todo
+    def save_todo(title, user_id)
+        begin
+            todo = Todo.create_todo(title: title, user_id: user_id)
+            todo_dto = TodoDto.new(todo_id: todo.todo_id, todo: {
+                title: todo.title,
+                completed: todo.completed,
+                created_at: todo.created_at
+            })
+            return todo_dto if todo&.persisted?
+            nil
+        rescue ActiveRecord::RecordInvalid => e
+            Rails.logger.error "Failed to create new todo: #{e}"
+            "Failed to create the new todo"
+        end
     end
 
     def toggle_complete(_id, _user_id)

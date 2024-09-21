@@ -1,15 +1,25 @@
+class CombinedService
+    attr_accessor :auth_service, :todo_service
+  
+    def initialize
+      @auth_service = AuthService.new
+      @todo_service = TodoService.new
+    end
+end
+
 class V1::ApplicationController < ActionController::API  
     private
+    def get_services
+        @combined_service ||= CombinedService.new
+    end
+
     def get_auth_service
         @auth_service = AuthService.new
     end
 
+
     def get_auth_header
         @auth_header = request.headers['Authorization']
-    end
-    
-    def get_todo_service
-        @todo_service = TodoService.new
     end
 
     def verify_auth_token
@@ -20,7 +30,7 @@ class V1::ApplicationController < ActionController::API
         else
             session_token = auth_header.gsub('Bearer', '').strip
             # Verify token is valid. If not, return 401.
-            @session = @auth_service.verify_token(session_token)
+            @session = @combined_service.auth_service.verify_token(session_token)
             if @session.nil? then render json: { error: 'Invalid token.' }, status: :unauthorized end
         end
     end

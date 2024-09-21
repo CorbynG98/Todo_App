@@ -63,13 +63,13 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(web::Data::new(app_state.clone())) // Pass the DB pool to the app
             .service(
-                web::scope("/auth")
+                web::scope("/v1/auth")
                     .route("/signin", web::post().to(signin))
                     .route("/signup", web::post().to(signup))
                     .route("/signout", web::post().to(signout).wrap(AuthHeader))
             )
             .service(
-                web::scope("/todo")
+                web::scope("/v1/todo")
                     .wrap(Auth) // Verify the session is actually valid
                     .wrap(AuthHeader) // Verify the auth header has been provided (reverse order, so this is done first)
                     .route("", web::get().to(get_todos))

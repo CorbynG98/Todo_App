@@ -9,9 +9,9 @@ const validateUsernameAndPassword = [
 ];
 
 const user_routes = (app: Express) => {
-  app.route('/auth/signin').post(validateUsernameAndPassword, login);
-  app.route('/auth/signup').post(validateUsernameAndPassword, create);
-  app.route('/auth/signout').post(authenticate, signout);
+  app.route('/v1/auth/signin').post(validateUsernameAndPassword, login);
+  app.route('/v1/auth/signup').post(validateUsernameAndPassword, create);
+  app.route('/v1/auth/signout').post(authenticate, signout);
 };
 
 export default user_routes;

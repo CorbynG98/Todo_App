@@ -13,11 +13,6 @@ class V1::ApplicationController < ActionController::API
         @combined_service ||= CombinedService.new
     end
 
-    def get_auth_service
-        @auth_service = AuthService.new
-    end
-
-
     def get_auth_header
         @auth_header = request.headers['Authorization']
     end

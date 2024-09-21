@@ -77,6 +77,7 @@ Rails.application.configure do
   
   # Allow custom domain host
   config.hosts << "rails-todo-api.corbyngreenwood.com"
+  config.hosts << "localhost"
 
   # Set the correct database configuration
   config.database_configuration = "production"

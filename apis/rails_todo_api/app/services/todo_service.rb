@@ -6,16 +6,6 @@ require_relative '../models/dto/todo_dto'
 class TodoService
     attr_accessor :all
 
-    def initialize
-        puts "TodoService initialize"
-        begin
-            db_config = YAML.load_file(File.expand_path('../../config/database.yml', __dir__), aliases: true)['default']
-            ActiveRecord::Base.establish_connection(db_config)
-        rescue => e
-            puts "Error in initialize: #{e.message}"
-        end
-    end
-
     def get_todos(user_id)
         todos = Todo.where(user_id: user_id).order(created_at: :asc).all
         todos.empty? ? [] : todos
@@ -24,7 +14,7 @@ class TodoService
     def save_todo(title, user_id)
         begin
             todo = Todo.create_todo(title: title, user_id: user_id)
-            todo_dto = TodoDto.new(todo_id: todo.todo_id, todo: {
+            todo_dto = Dto::TodoDto.new(todo_id: todo.todo_id, todo: {
                 title: todo.title,
                 completed: todo.completed,
                 created_at: todo.created_at

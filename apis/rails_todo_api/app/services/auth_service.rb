@@ -7,16 +7,6 @@ require_relative '../models/dto/session_dto'
 class AuthService
     attr_accessor :all
 
-    def initialize
-        puts "AuthService initialize"
-        begin
-            db_config = YAML.load_file(File.expand_path('../../config/database.yml', __dir__), aliases: true)['default']
-            ActiveRecord::Base.establish_connection(db_config)
-        rescue => e
-            puts "Error in initialize: #{e.message}"
-        end
-    end
-
     def signup(_username, _password)
         existing_user = User.find_by(username: _username)
         return nil if existing_user
@@ -30,7 +20,7 @@ class AuthService
         session = Session.create_session(session_token: session_token, user_id: user.username)
 
         # Create sessionDto to return
-        session_dto = SessionDto.new({session_token: session_token, username: user.username})
+        session_dto = Dto::SessionDto.new({session_token: session_token, username: user.username})
       
         return session_dto
     end
@@ -47,7 +37,7 @@ class AuthService
             session = Session.create_session(session_token: session_token, user_id: user.username)
 
             # Create sessionDto to return
-            session_dto = SessionDto.new({session_token: session_token, username:  user.username})
+            session_dto = Dto::SessionDto.new({session_token: session_token, username:  user.username})
 
             return session_dto if session&.persisted?
             nil

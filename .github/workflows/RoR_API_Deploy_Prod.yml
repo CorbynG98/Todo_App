@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rails_todo_api
+        working-directory: ./api/rails_todo_api
 
     permissions:
       contents: 'read'
@@ -60,16 +60,16 @@ jobs:
         "GCP.ProjectId": ${{ secrets.GCP_PROJECT_ID }}
 
     - name: 'Create database config file'
-        run: |
-          mkdir -p config # Ensure the config directory exists
-          echo "default: &default" > config/database.yml
-          echo "  adapter: mysql2" >> config/database.yml
-          echo "  encoding: utf8" >> config/database.yml
-          echo "  pool: 5" >> config/database.yml
-          echo "  username: ${{ secrets.MYSQL_USERNAME }}" >> config/database.yml
-          echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> config/database.yml
-          echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> config/database.yml
-          echo "  host: ${{ secrets.MYSQL_HOST }}" >> config/database.yml
+      run: |
+        mkdir -p config # Ensure the config directory exists
+        echo "default: &default" > config/database.yml
+        echo "  adapter: mysql2" >> config/database.yml
+        echo "  encoding: utf8" >> config/database.yml
+        echo "  pool: 5" >> config/database.yml
+        echo "  username: ${{ secrets.MYSQL_USERNAME }}" >> config/database.yml
+        echo "  password: ${{ secrets.MYSQL_PASSWORD }}" >> config/database.yml
+        echo "  database: ${{ secrets.MYSQL_DATABASE }}" >> config/database.yml
+        echo "  host: ${{ secrets.MYSQL_HOST }}" >> config/database.yml
 
     - name: Build Docker Image
       run: docker build -f ./Dockerfile.rails -t $IMAGE_NAME .
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rails_todo_api
+        working-directory: ./api/rails_todo_api
 
     permissions:
       contents: 'read'

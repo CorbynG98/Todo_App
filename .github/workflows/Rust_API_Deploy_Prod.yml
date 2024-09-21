@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rust_todo_api
+        working-directory: ./api/rust_todo_api
 
     permissions:
       contents: 'read'
@@ -73,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rust_todo_api
+        working-directory: ./api/rust_todo_api
 
     permissions:
       contents: 'read'

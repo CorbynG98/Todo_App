@@ -7,6 +7,9 @@ dist/
 ### dotenv ###
 *.env
 
+## Rails DB Files ##
+**/database.yml
+
 ### Node ###
 # Logs
 logs

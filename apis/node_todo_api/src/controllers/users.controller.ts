@@ -74,7 +74,6 @@ const login = async (req: Request, res: Response) => {
         });
     })
     .catch((err) => {
-      console.log(err)
       if (err == null) {
         return res
           .status(401)

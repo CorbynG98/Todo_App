@@ -1,5 +1,6 @@
-class Todo
+class Todo < ActiveRecord::Base
     attr_accessor :id, :title, :user_id, :completed, :created_at
+    self.table_name = 'Todo'  # Specify the table name explicitly
 
     def initialize(id, todo = {})
         self.id = id

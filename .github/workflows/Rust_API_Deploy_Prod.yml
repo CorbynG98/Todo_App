@@ -25,34 +25,9 @@ env:
   IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}/rust.todo.api
 
 jobs:
-  # test:
-  #   name: Test
-  #   environment: Test
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [20.x]
-  #   defaults:
-  #     run:
-  #       working-directory: ./rust_todo_api
-
-  #   steps:
-  #     - uses: actions/checkout@v4
-
-  #     - name: 'Create env file'
-  #       run: |
-  #         rm -rf .test.env
-  #         touch .test.env
-  #         echo MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} >> .test.env
-  #         echo MYSQL_HOST=${{ secrets.MYSQL_HOST }} >> .test.env
-  #         echo MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} >> .test.env
-  #         echo MYSQL_USER=${{ secrets.MYSQL_USER }} >> .test.env
-  #         cat .test.env
-
   build:
     name: Build
     environment: Production
-    # needs: test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -81,8 +56,8 @@ jobs:
       - name: 'Create env file'
         run: |
           rm -rf .env
-          touch .env
-          echo DATABASE_URL=${{ secrets.RUST_MYSQL_DB_URL }} >> .env
+          touch .envrun: |
+          echo "DATABASE_URL=mysql://${{ secrets.MYSQL_USERNAME }}:${{ secrets.MYSQL_PASSWORD }}@${{ secrets.MYSQL_HOST }}/${{ secrets.MYSQL_DATABASE }}" > .env
           cat .env
 
       - name: Build Docker Image

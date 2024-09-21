@@ -40,7 +40,7 @@ struct AppState {
 async fn main() -> std::io::Result<()> {
     // Configure host and port for the server
     let host = "0.0.0.0";
-    let port = 5001;
+    let port = 5000;
     println!("Starting server at http://{}:{}", host, port);
 
     // Load the .env file

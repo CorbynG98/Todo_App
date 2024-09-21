@@ -13,4 +13,7 @@ Rails.application.routes.draw do
   namespace :v1 do
     concerns :base_api
   end
+
+  # Healthcheck or something. No harm keeping it
+  get "up" => "rails/health#show", as: :rails_health_check
 end

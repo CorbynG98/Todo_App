@@ -22,11 +22,12 @@ mod utils { // Declare the utils module
     pub mod hash_utils;
 }
 
-use actix_web::{web, App, HttpServer};
+use actix_web::{http, web, App, HttpServer};
 use handlers::user_handler::{signin, signup, signout}; // Auth endpoint code
 use handlers::todo_handler::{get_todos, create_todo, toggle_complete, clear_complete, delete_todo}; // Todo endpoint code
 use dotenv::dotenv;
 use sqlx::mysql::{MySqlPool, MySqlPoolOptions};
+use actix_cors::Cors;
 use crate::middleware::auth_middleware::Auth;
 use crate::middleware::auth_header_verify_middleware::AuthHeader;
 use crate::middleware::todo_id_verify_middleware::TodoId;
@@ -59,8 +60,20 @@ async fn main() -> std::io::Result<()> {
     let app_state = AppState { db_pool };
     // Start the server
     println!("API ready to receive requests!");
-    HttpServer::new(move || {
+    let result = HttpServer::new(move || {
+        // CORS configuration
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allowed_methods(vec!["GET", "POST", "DELETE"])
+            .allowed_headers(vec![
+                http::header::AUTHORIZATION,
+                http::header::CONTENT_TYPE,
+                http::header::ACCEPT,
+            ])
+            .max_age(3600);
+        // App configuration
         App::new()
+            .wrap(cors)
             .app_data(web::Data::new(app_state.clone())) // Pass the DB pool to the app
             .service(
                 web::scope("/v1/auth")
@@ -79,7 +92,14 @@ async fn main() -> std::io::Result<()> {
                     .route("/clearcompleted", web::post().to(clear_complete))
             )
     })
-    .bind((host, port))?
+    .bind((host, port)).expect("Failed to bind to port")
     .run()
-    .await
+    .await;
+
+    match result {
+        Ok(_) => println!("Server shut down gracefully"),
+        Err(e) => eprintln!("Server error: {:?}", e),
+    }
+
+    Ok(())
 }

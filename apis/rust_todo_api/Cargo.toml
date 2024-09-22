@@ -16,6 +16,7 @@ chrono              = "*"
 regex               = "*"
 futures             = "*"
 futures-util        = "*"
+actix-cors          = "*"
 uuid                = { version = "*", features = ["v4"] }
 serde               = { version = "*", features = ["derive"] }
 sqlx                = { version = "*", features = ["runtime-async-std", "macros", "mysql", "time"] }

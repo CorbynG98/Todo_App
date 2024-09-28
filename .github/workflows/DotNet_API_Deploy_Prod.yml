@@ -27,7 +27,6 @@ env:
 jobs:
   build:
     name: Build Docker Image
-    needs: testing
     runs-on: ubuntu-latest
     defaults:
       run:

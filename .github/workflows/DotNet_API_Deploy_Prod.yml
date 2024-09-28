@@ -1,0 +1,95 @@
+name: DotNet Build And Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name for manual trigger'
+        required: true
+        default: "Manual Trigger"
+  push:
+    branches: [ main ]
+    paths:
+      - '**/dotnet_todo_api/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '**/dotnet_todo_api/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: us-central1-docker.pkg.dev
+  IMAGE_NAME: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.GCP_APP_NAME }}/dotnet.todo.api
+
+jobs:
+  build:
+    name: Build Docker Image
+    needs: testing
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./apis/dotnet_todo_api
+      
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: 'auth'
+      name: "Authenticate Google Cloud"
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: ${{secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Token replacement
+      uses: receiptably/variable-substitution@v1
+      with:
+          files: '**/appsettings.json'
+      env:
+          "ConnectionStrings.DefaultConnection": ${{ secrets.DOTNET_DB_CONNECTION }}
+
+    - name: Configure Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Configure Docker
+      run: gcloud auth configure-docker --quiet $REGISTRY
+
+    - name: Build Docker Image
+      run: docker build -f ./Dockerfile -t $IMAGE_NAME .
+
+    - name: Push Docker image
+      run: docker push $IMAGE_NAME
+
+  deploy:
+    name: Deploy Docker Image
+    needs: build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./apis/dotnet_todo_api
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - id: 'auth'
+      name: "Authenticate Google Cloud"
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: ${{secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Configure Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Deploy Docker image
+      run: gcloud run deploy dotnet-todo-api --image $IMAGE_NAME --region us-central1 --platform managed

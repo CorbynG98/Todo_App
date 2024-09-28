@@ -1,6 +1,19 @@
 # Created by https://www.toptal.com/developers/gitignore/api/ruby,rails,dotenv,node,react,rust
 # Edit at https://www.toptal.com/developers/gitignore?templates=ruby,rails,dotenv,node,react,rust
 
+### DotnetCore ###
+# .NET Core build folders
+bin/
+obj/
+.vs/
+
+### DotnetCore AppSettings ###
+appsettings.Development.json
+
+# Common node modules locations
+/node_modules
+/wwwroot/node_modules
+
 ## Custom ones ##
 dist/
 

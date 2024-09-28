@@ -4,6 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:5003
+ENV PORT=5003
 EXPOSE 5003
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build

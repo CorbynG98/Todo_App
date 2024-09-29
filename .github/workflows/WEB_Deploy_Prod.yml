@@ -43,6 +43,7 @@ jobs:
             "apiUrlRails": ${{ secrets.API_URL_RAILS }}
             "apiUrlNode": ${{ secrets.API_URL_NODE }}
             "apiUrlRust": ${{ secrets.API_URL_RUST }}
+            "apiUrlDotnet": "${{ secrets.API_URL_DOTNET }}"
 
       - name: npm ci, build
         run: |

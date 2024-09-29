@@ -96,7 +96,7 @@ namespace dotnet_todo_api.api
             app.UseCors(t => t
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithOrigins("*.corbyngreenwood.com", "127.0.0.1:3000", "localhost:3000"));
+                .AllowAnyOrigin());
 
             app.Run();
         }

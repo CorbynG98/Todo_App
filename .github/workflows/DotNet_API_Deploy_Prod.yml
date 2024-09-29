@@ -27,6 +27,7 @@ env:
 jobs:
   build:
     name: Build Docker Image
+    environment: Production
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -67,6 +68,7 @@ jobs:
 
   deploy:
     name: Deploy Docker Image
+    environment: Production
     needs: build
     runs-on: ubuntu-latest
     defaults:

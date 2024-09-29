@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Asp.Versioning;
 using dotnet_todo_api.services.Services;
 using dotnet_todo_api.core.Services;
+using Microsoft.Extensions.Configuration;
+using AspNetCoreRateLimit;
+using PersonalWebsiteBE.Core.Middleware;
+using Google.Cloud.Diagnostics.AspNetCore3;
 
 namespace dotnet_todo_api.api
 {
@@ -24,8 +28,10 @@ namespace dotnet_todo_api.api
             // Repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<ITodoRepository, TodoRepository>();
             // Services
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ITodoService, TodoService>();
 
             // Enable auto mapper
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -44,9 +50,22 @@ namespace dotnet_todo_api.api
                 options.SubstituteApiVersionInUrl = true;
             });
 
+
+            builder.Services.AddOptions();
+            builder.Services.AddMemoryCache();
+            builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+            builder.Services.AddInMemoryRateLimiting();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddGoogleErrorReportingForAspNetCore(new Google.Cloud.Diagnostics.Common.ErrorReportingServiceOptions
+            {
+                ProjectId = "rails-todo-app-386721",
+                ServiceName = "dotnet.todo.api",
+                Version = "1.0"
+            });
 
             var app = builder.Build();
 
@@ -58,6 +77,10 @@ namespace dotnet_todo_api.api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseIpRateLimiting();
+
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

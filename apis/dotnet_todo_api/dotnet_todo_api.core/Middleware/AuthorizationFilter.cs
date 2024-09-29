@@ -1,4 +1,5 @@
 ﻿using dotnet_todo_api.core.Services;
+using dotnet_todo_api.core.Utility;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,7 +23,7 @@ namespace PersonalWebsiteBE.Filters
                 return;
             }
             // Pass this token through to firestore query to check if it exists. Return true if it does exist
-            if (!await authService.IsSessionTokenValidAsync(sessionToken)) {
+            if (!await authService.IsSessionTokenValidAsync(sessionToken.ToString())) {
                 actionContext.Result = new dotnet_todo_api.core.StatusResults.ForbiddenResult();
                 return;
             }

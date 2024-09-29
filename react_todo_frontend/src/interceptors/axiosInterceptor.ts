@@ -55,6 +55,8 @@ export default async function GetAxiosInstance() {
       return createApiInterceptor(appSettings.apiUrlNode);
     case 'rust':
       return createApiInterceptor(appSettings.apiUrlRust);
+    case 'dotnet':
+      return createApiInterceptor(appSettings.apiUrlDotnet);
     default:
       return createApiInterceptor(appSettings.apiUrlRust); // Default to Rust if no match
   }

@@ -8,8 +8,23 @@ namespace dotnet_todo_api.persistence.Repositories
     {
         private readonly TodoDbContext _context = context;
 
-        public async Task CreateSessionAsync(Session session) => await _context.Sessions.AddAsync(session);
+        public async Task CreateSessionAsync(Session session)
+        {
+            await _context.Sessions.AddAsync(session);
+            await _context.SaveChangesAsync();
+        }
         public async Task<Session?> GetSessionByTokenAsync(string sessionToken) => await _context.Sessions.FirstOrDefaultAsync(s => s.SessionToken == sessionToken);
-        public void DeleteSession(Session session) => _context.Sessions.Remove(session);
+        public async Task<string?> GetUserBySessionTokenAsync(string sessionToken)
+        {
+            return await _context.Sessions
+                .Include(t => t.User)
+                .Where(s => s.SessionToken == sessionToken)
+                .Select(t => t.User!.Username )
+                .FirstOrDefaultAsync();
+        }
+        public async Task DeleteSessionAsync(Session session) {
+            _context.Sessions.Remove(session);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -27,6 +27,8 @@ function NavBar() {
         return 'Rails';
       case 'rust':
         return 'Rust';
+      case 'dotnet':
+        return '.Net';
       default:
         return 'Rust';
     }
@@ -42,6 +44,7 @@ function NavBar() {
     { value: 'node', label: getApiTypeLabel('node') },
     { value: 'rails', label: getApiTypeLabel('rails') },
     { value: 'rust', label: getApiTypeLabel('rust') },
+    { value: 'dotnet', label: getApiTypeLabel('dotnet') },
   ];
 
   return (

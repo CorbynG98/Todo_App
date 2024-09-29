@@ -2,6 +2,7 @@
 using dotnet_todo_api.core.Models.Auth;
 using dotnet_todo_api.core.Repositories;
 using dotnet_todo_api.core.Services;
+using dotnet_todo_api.core.Utility;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -19,11 +20,11 @@ namespace dotnet_todo_api.services.Services
                 return null; // Invalid username or password
             }
             // Auth valid. Lets generate a session and return it
-            var sessionToken = GenerateSha512Hash(Guid.NewGuid().ToString("N"));
+            var sessionToken = SecurityUtil.GenerateSha512Hash(Guid.NewGuid().ToString("N"));
             var session = new Session
             {
                 UserId = user.Username,
-                SessionToken = sessionToken,
+                SessionToken = SecurityUtil.GenerateSha512Hash(sessionToken),
                 CreatedAt = DateTime.UtcNow
             };
             await sessionRepository.CreateSessionAsync(session);
@@ -48,11 +49,11 @@ namespace dotnet_todo_api.services.Services
             };
             await userRepository.CreateUserAsync(newUser);
             // Create a session for this new user
-            var sessionToken = GenerateSha512Hash(Guid.NewGuid().ToString("N"));
+            var sessionToken = SecurityUtil.GenerateSha512Hash(Guid.NewGuid().ToString("N"));
             var session = new Session
             {
                 UserId = username,
-                SessionToken = sessionToken,
+                SessionToken = SecurityUtil.GenerateSha512Hash(sessionToken),
                 CreatedAt = DateTime.UtcNow
             };
             await sessionRepository.CreateSessionAsync(session);
@@ -65,16 +66,18 @@ namespace dotnet_todo_api.services.Services
 
         public async Task SignoutAsync(string sessionToken)
         {
-            var session = await sessionRepository.GetSessionByTokenAsync(sessionToken);
+            var hashedSession = SecurityUtil.GenerateSha512Hash(sessionToken);
+            var session = await sessionRepository.GetSessionByTokenAsync(hashedSession);
             if (session != null)
             {
-                sessionRepository.DeleteSession(session);
+                await sessionRepository.DeleteSessionAsync(session);
             }
         }
 
         public async Task<bool> IsSessionTokenValidAsync(string sessionToken)
         {
-            var session = await sessionRepository.GetSessionByTokenAsync(sessionToken);
+            var hashedSession = SecurityUtil.GenerateSha512Hash(sessionToken.ToString());
+            var session = await sessionRepository.GetSessionByTokenAsync(hashedSession);
             if (session == null)
             {
                 return false;
@@ -82,22 +85,10 @@ namespace dotnet_todo_api.services.Services
             return true;
         }
 
-        private static string GenerateSha512Hash(string input)
+        public async Task<string?> GetUserBySessionTokenAsync(string sessionToken)
         {
-            // Convert input string to byte array
-            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
-
-            // Create SHA512 hash
-            byte[] hashBytes = SHA512.HashData(inputBytes);
-
-            // Convert hash to hexadecimal string
-            StringBuilder sb = new();
-            for (int i = 0; i < hashBytes.Length; i++)
-            {
-                sb.Append(hashBytes[i].ToString("x2"));
-            }
-
-            return sb.ToString();
+            var hashedSession = SecurityUtil.GenerateSha512Hash(sessionToken.ToString());
+            return await sessionRepository.GetUserBySessionTokenAsync(hashedSession);
         }
     }
 }

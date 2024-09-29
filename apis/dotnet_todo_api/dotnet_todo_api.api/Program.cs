@@ -85,6 +85,11 @@ namespace dotnet_todo_api.api
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCors(t => t
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("*.corbyngreenwood.com", "127.0.0.1:3000", "localhost:3000"));
+
             app.MapControllers();
 
             app.Run();

@@ -54,11 +54,17 @@ namespace dotnet_todo_api.api
             builder.Services.AddOptions();
             builder.Services.AddMemoryCache();
             builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+            builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
             builder.Services.AddInMemoryRateLimiting();
+
+            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors();
 
             builder.Services.AddGoogleErrorReportingForAspNetCore(new Google.Cloud.Diagnostics.Common.ErrorReportingServiceOptions
             {
@@ -85,12 +91,12 @@ namespace dotnet_todo_api.api
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.MapControllers();
+
             app.UseCors(t => t
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .WithOrigins("*.corbyngreenwood.com", "127.0.0.1:3000", "localhost:3000"));
-
-            app.MapControllers();
 
             app.Run();
         }

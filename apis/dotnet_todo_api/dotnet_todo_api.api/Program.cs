@@ -58,7 +58,7 @@ namespace dotnet_todo_api.api
             builder.Services.AddInMemoryRateLimiting();
 
             builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
-            builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+builder.Services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -96,7 +96,7 @@ namespace dotnet_todo_api.api
             app.UseCors(t => t
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .AllowAnyOrigin());
+                .WithOrigins("https://todo.corbyngreenwood.com", "http://127.0.0.1:3000", "http://localhost:3000"));
 
             app.Run();
         }

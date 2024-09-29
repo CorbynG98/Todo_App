@@ -64,8 +64,7 @@ namespace dotnet_todo_api.api
 
             app.MapControllers();
 
-            var url = Environment.GetEnvironmentVariable("ASPNETCORE_URLS") ?? "http://+:5003";
-            app.Run(url);
+            app.Run();
         }
     }
 }
